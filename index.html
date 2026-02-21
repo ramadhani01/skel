@@ -885,29 +885,44 @@
 
     // Fungsi untuk meminta 5 judul ide dengan variasi fresh
     async function callGroqForIdeas(apiKey, count = 5) {
-        const prompt = `Buat ${count} judul video Shorts dengan variasi ide yang tidak membosankan.
+    const prompt = `Buat ${count} judul video Shorts yang sangat unik, tidak generik, dan tidak membosankan.
 
-Tema utama: batas biologis tubuh manusia dalam kondisi tertentu.
+Tema utama: batas biologis tubuh manusia dalam kondisi tidak biasa atau situasi sehari-hari yang jarang dipikirkan.
+
+Campurkan:
+- Situasi normal (ruangan tertutup, duduk lama, cahaya, suara, suhu, kebiasaan kecil).
+- Situasi semi-absurd atau hampir mustahil (planet aneh, makhluk besar, kota tanpa malam, eksperimen misterius).
 
 Gunakan format variasi:
 - "Berapa lama..."
 - "Apa yang terjadi jika..."
 - "Berapa banyak..."
 
-Aturan:
-- Setiap judul harus terasa unik
-- Jangan semua judul fantasi, jangan semua normal (campur)
-- Tidak terdengar seperti artikel medis
-- Tidak terlalu panjang
-- Bikin penasaran
-- Bisa divisualisasikan secara sinematik
+WAJIB:
+- Minimal 1 judul sangat aneh atau tidak biasa.
+- Minimal 1 judul sangat relatable.
+- Minimal 1 judul menyebut bagian tubuh spesifik (mata, otak, tulang, saraf, jantung, hormon).
+- Setiap judul harus berbeda pola dan tidak terasa repetitif.
 
-Tulis nomor 1-${count} saja. Hanya judul, tanpa deskripsi tambahan. Gunakan bahasa Indonesia.
+Larangan:
+- Jangan terdengar seperti artikel medis.
+- Jangan gunakan topik klise (tidak makan total, tidak tidur total, menahan napas ekstrem).
+- Jangan ulang ide yang umum atau sering dipakai.
+
+Judul harus:
+- Pendek dan tajam
+- Sinematik dan bisa divisualisasikan
+- Bikin penasaran
+- Terasa seperti eksperimen rahasia
+
+Tulis nomor 1-${count} saja.
+Hanya judul, tanpa deskripsi tambahan.
+Gunakan bahasa Indonesia yang kuat dan imajinatif.
 
 Contoh judul fresh:
-1. Berapa lama kamu bisa bertahan di ruangan kedap suara?
-2. Apa yang terjadi jika kamu mendengar infrasonik selama 8 jam?
-3. Berapa banyak pattern visual yang bisa membuatmu pusing?
+1. Berapa lama tubuhmu bisa hidup di kota tanpa bayangan?
+2. Apa yang terjadi jika tulangmu tidak pernah merasakan beban?
+3. Berapa banyak panas yang bisa ditahan kulit sebelum lupa rasa dingin?
 
 HASILKAN IDE YANG SANGAT BERBEDA DARI BIASANYA. Jangan terdengar seperti artikel kesehatan biasa.
 Buat seolah-olah ini rahasia tubuh yang jarang disadari. Jangan ulang ide yang itu-itu saja.`;
