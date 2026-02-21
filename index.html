@@ -951,47 +951,38 @@ Ultra detailed, sharp focus, volumetric lighting, cinematic realism, 8k.`;
 
     // Fungsi untuk meminta 5 judul ide dengan variasi fresh
     async function callGroqForIdeas(apiKey, count = 5) {
-        const prompt = `Buat ${count} judul video Shorts yang sangat unik, tidak generik, dan tidak membosankan.
+    async function callGroqForIdeas(apiKey, count = 5) {
+    const prompt = `Buat ${count} judul video Shorts tentang "Batas Transformasi Tubuh".
+Fokus pada efek jangka panjang dari kebiasaan sehari-hari yang dihitung secara ekstrem.
 
-Tema utama: batas biologis tubuh manusia dalam kondisi tidak biasa atau situasi sehari-hari yang jarang dipikirkan.
-
-Campurkan:
-- Situasi normal (ruangan tertutup, duduk lama, cahaya, suara, suhu, kebiasaan kecil).
-- Situasi semi-absurd atau hampir mustahil (planet aneh, makhluk besar, kota tanpa malam, eksperimen misterius).
+TEMA: "Titik Kritis Tubuh".
+Bayangkan kita menghitung jumlah benda/aktivitas sampai tubuh berubah secara fisik.
 
 Gunakan format variasi:
-- "Berapa lama..."
-- "Apa yang terjadi jika..."
-- "Berapa banyak..."
+- "Berapa banyak [benda]..."
+- "Berapa jam [aktivitas]..."
+- "Di titik mana tubuhmu..."
 
 WAJIB:
-- Minimal 1 judul sangat aneh atau tidak biasa.
-- Minimal 1 judul sangat relatable.
-- Minimal 1 judul menyebut bagian tubuh spesifik (mata, otak, tulang, saraf, jantung, hormon).
-- Setiap judul harus berbeda pola dan tidak terasa repetitif.
+- Gunakan angka atau satuan (kaleng, batang, jam, liter, piring).
+- Gunakan kata kerja visual yang kuat: Menghitam, Membeku, Mengeras, Melambat, Berhenti.
+- Harus berbasis pengetahuan/sains tapi terasa seperti "Countdown" menuju kerusakan.
+- Minimal 1 judul tentang Organ Dalam (Paru, Jantung, Ginjal).
+- Minimal 1 judul tentang Saraf/Otak.
+- Minimal 1 judul tentang Cairan Tubuh (Darah, Air liur, Lambung).
 
 Larangan:
-- Jangan terdengar seperti artikel medis.
-- Jangan gunakan topik klise (tidak makan total, tidak tidur total, menahan napas ekstrem).
-- Jangan ulang ide yang umum atau sering dipakai.
+- Jangan gunakan judul yang "sopan" (misal: "Bahaya merokok").
+- Jangan bertele-tele.
 
-Judul harus:
-- Pendek dan tajam
-- Sinematik dan bisa divisualisasikan
-- Bikin penasaran
-- Terasa seperti eksperimen rahasia
+Contoh gaya judul:
+1. Berapa kaleng soda yang harus kamu minum sampai otakmu "membeku"?
+2. Berapa ribu batang rokok yang membuat paru-parumu mulai menghitam permanen?
+3. Berapa liter kopi yang dibutuhkan jantungmu untuk mulai berdetak tidak beraturan?
 
 Tulis nomor 1-${count} saja.
 Hanya judul, tanpa deskripsi tambahan.
 Gunakan bahasa Indonesia yang kuat dan imajinatif.
-
-Contoh judul fresh:
-1. Berapa lama tubuhmu bisa hidup di kota tanpa bayangan?
-2. Apa yang terjadi jika tulangmu tidak pernah merasakan beban?
-3. Berapa banyak panas yang bisa ditahan kulit sebelum lupa rasa dingin?
-
-HASILKAN IDE YANG SANGAT BERBEDA DARI BIASANYA. Jangan terdengar seperti artikel kesehatan biasa.
-Buat seolah-olah ini rahasia tubuh yang jarang disadari. Jangan ulang ide yang itu-itu saja.`;
 
         const body = {
             model: GROQ_MODEL,
