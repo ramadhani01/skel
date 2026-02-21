@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>batas · manusia — generator ide video</title>
+    <!-- Plus Jakarta Sans untuk logo dan judul -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Inter untuk lainnya -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1.8rem;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Logo di tengah dengan Plus Jakarta Sans - ungu neon */
+        .logo-container {
+            text-align: center;
+            margin: 0.5rem 0 2.5rem 0;
+        }
+        .logo-container h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #a855f7, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+        .logo-container .sub {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 400;
+            color: #666666;
+            font-size: 1rem;
+            margin-top: 0.25rem;
+            letter-spacing: 0.3px;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+
+        /* Card dengan efek glass putih */
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 2.5rem;
+            padding: 2.2rem 2.2rem;
+            box-shadow: 0 25px 50px -12px rgba(168, 85, 247, 0.2), 0 4px 18px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        /* Input API Key */
+        .api-key-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1rem 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(168, 85, 247, 0.1);
+        }
+        .api-key-label {
+            font-weight: 600;
+            color: #a855f7;
+            min-width: 90px;
+            font-size: 0.95rem;
+        }
+        .api-key-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 0.7rem 1.3rem;
+            border-radius: 3rem;
+            border: 2px solid #e5e7eb;
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+            background: white;
+            color: #333333;
+            outline: none;
+            transition: 0.15s;
+        }
+        .api-key-input:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+        .api-key-hint {
+            font-size: 0.8rem;
+            color: #666666;
+            width: 100%;
+            margin-top: 0.2rem;
+        }
+
+        /* Tombol gradasi ungu neon */
+        .button-generate {
+            background: linear-gradient(135deg, #a855f7, #d946ef);
+            border: none;
+            padding: 0.8rem 2.2rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.3);
+            transition: 0.2s;
+            letter-spacing: 0.01em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .button-generate:hover {
+            background: linear-gradient(135deg, #9333ea, #c026d3);
+            box-shadow: 0 15px 30px -5px rgba(168, 85, 247, 0.4);
+            transform: scale(1.02);
+        }
+
+        .button-generate:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.3);
+        }
+
+        .button-secondary {
+            background: white;
+            border: 1.5px solid #a855f7;
+            padding: 0.5rem 1.5rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #a855f7;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.1);
+            transition: 0.1s;
+        }
+        .button-secondary:hover {
+            background: #a855f7;
+            color: white;
+            border-color: #d946ef;
+        }
+
+        .idea-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1.5rem 0 1.5rem;
+        }
+
+        .idea-item {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 0.9rem 1.5rem;
+            border-left: 8px solid #a855f7;
+            box-shadow: 0 10px 15px -3px rgba(168, 85, 247, 0.1);
+            transition: 0.15s ease;
+            cursor: pointer;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .idea-item:hover {
+            background: white;
+            border-left-width: 12px;
+            border-left-color: #d946ef;
+            box-shadow: 0 15px 20px -5px rgba(168, 85, 247, 0.2);
+        }
+
+        .idea-item.selected {
+            background: white;
+            border-left-color: #d946ef;
+            border: 2px solid #a855f7;
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+        }
+
+        .idea-number {
+            width: 2.3rem;
+            height: 2.3rem;
+            background: linear-gradient(135deg, #a855f7, #d946ef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .idea-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #333333;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .script-output {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 2.5rem;
+            padding: 1.8rem;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(168, 85, 247, 0.15);
+            margin-top: 2rem;
+        }
+
+        .script-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #a855f7;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .script-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: #333333;
+            font-weight: 400;
+            border-left: 4px solid #a855f7;
+            padding-left: 1.3rem;
+        }
+
+        .scene-prompt {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.3rem;
+            margin: 1.5rem 0 0.5rem;
+            border: 1px dashed #a855f7;
+        }
+
+        .scene-title {
+            font-weight: 700;
+            color: #a855f7;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .prompt-container {
+            background: white;
+            border-radius: 1.3rem;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #a855f7, #d946ef);
+            border-radius: 3rem;
+            padding: 0.2rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid #a855f7;
+            color: #a855f7;
+            padding: 0.2rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .copy-btn:hover {
+            background: #a855f7;
+            color: white;
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .prompt-text {
+            font-size: 0.9rem;
+            color: #333333;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .prompt-full {
+            display: none;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed #a855f7;
+        }
+
+        .show-more {
+            color: #a855f7;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+
+        hr {
+            border: 0.5px solid rgba(168, 85, 247, 0.2);
+            margin: 1.2rem 0;
+        }
+
+        .action-bottom {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0 0.2rem;
+        }
+
+        .selected-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border-radius: 4rem;
+            padding: 0.5rem 1.5rem;
+            margin: 1rem 0 0.5rem;
+            border: 1px solid #a855f7;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.1);
+        }
+
+        #selectedDisplay {
+            color: #a855f7;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .footer-credit {
+            text-align: center;
+            color: #a855f7;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 0.8rem 1.5rem;
+            border-radius: 3rem;
+            margin: 1rem 0;
+            border: 1px solid #ef4444;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .model-badge {
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 2rem;
+            padding: 0.2rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #a855f7;
+            display: inline-block;
+            border: 1px solid #a855f7;
+            margin-left: 0.5rem;
+        }
+
+        .get-key-link {
+            color: #a855f7;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px dashed #a855f7;
+        }
+        .get-key-link:hover {
+            color: #d946ef;
+        }
+
+        .audio-player-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 2rem;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .audio-player-container audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 2rem;
+        }
+
+        .audio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #a855f7;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .audio-label i {
+            font-size: 1rem;
+        }
+
+        .voice-badge {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid #a855f7;
+            color: #a855f7;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-left: 0.5rem;
+        }
+
+        .loading-audio {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #a855f7;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(168, 85, 247, 0.3);
+            border-top-color: #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Logo di tengah dengan Plus Jakarta Sans - ungu neon -->
+    <div class="logo-container">
+        <h1>batas · manusia</h1>
+        <div class="sub">kegagalan biologis dalam visual sunyi</div>
+    </div>
+
+    <div class="card">
+        <!-- Input API Key dengan auto-save -->
+        <div class="api-key-container">
+            <span class="api-key-label">🔑 Groq Key</span>
+            <input type="password" id="apiKeyInput" class="api-key-input" placeholder="gsk_...">
+            <div class="api-key-hint">
+                <a href="https://console.groq.com/keys" target="_blank" class="get-key-link">Dapatkan key</a>
+            </div>
+        </div>
+
+        <!-- Input ElevenLabs API Key dengan auto-save -->
+        <div class="api-key-container">
+            <span class="api-key-label">🎤 ElevenLabs Key</span>
+            <input type="password" id="elevenLabsKeyInput" class="api-key-input" placeholder="elevenlabs_...">
+            <div class="api-key-hint">
+                <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" class="get-key-link">Dapatkan key</a> (opsional, untuk TTS)
+                <span class="voice-badge">✨ voicel</span>
+            </div>
+        </div>
+
+        <!-- daftar ide (hanya 5) - hanya judul -->
+        <div id="ideaList" class="idea-grid">
+            <div style="text-align: center; color: #666666; padding: 1.5rem; font-style: italic; font-size: 0.95rem;">
+                Masukkan API Key, lalu generate
+            </div>
+        </div>
+
+        <!-- area pemilihan ide -->
+        <div id="selectedArea" style="display: none;">
+            <div class="selected-bar">
+                <span id="selectedDisplay">✔ ide terpilih: </span>
+                <button id="generateScriptBtn" class="button-secondary">🎬 buat naskah</button>
+            </div>
+        </div>
+
+        <!-- TOMBOL GENERATE (hanya 5 ide) -->
+        <div class="action-bottom">
+            <button id="generateIdeasBtn" class="button-generate">
+                <span>✨</span> generate 5 ide fresh
+            </button>
+        </div>
+    </div>
+
+    <!-- hasil naskah (bahasa Indonesia) + prompt (bahasa Inggris) -->
+    <div id="scriptContainer" class="script-output" style="display: none;">
+        <div class="script-label">naskah (bahasa indonesia) · 45–70 detik</div>
+        <div id="scriptText" class="script-text"></div>
+        
+        <!-- Audio Player Container (akan muncul setelah naskah jadi) -->
+        <div id="audioContainer" style="display: none;" class="audio-player-container">
+            <div class="audio-label">
+                <span>🎵 Suara Rachel (multilingual v2)</span>
+            </div>
+            <audio id="audioPlayer" controls preload="metadata">
+                <source src="" type="audio/mpeg">
+                Browser tidak mendukung audio player.
+            </audio>
+            <div id="audioLoading" class="loading-audio" style="display: none;">
+                <div class="spinner"></div>
+                <span>Menghasilkan suara...</span>
+            </div>
+        </div>
+
+        <hr>
+        <div class="script-label">image & video prompts (english — original style)</div>
+        <div id="scenePrompts"></div>
+    </div>
+
+    <div class="footer-credit">
+        human skeleton 
+    </div>
+</div>
+
+<script>
+    // GROQ API configuration
+    const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+    const GROQ_MODEL = "llama-3.3-70b-versatile";
+
+    // ElevenLabs configuration
+    const ELEVENLABS_URL = "https://api.elevenlabs.io/v1";
+    
+    // Rachel voice ID (default ElevenLabs voice)
+    const RACHEL_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
+    
+    // LocalStorage keys
+    const STORAGE_KEYS = {
+        GROQ_API_KEY: 'batasManusia_groqKey',
+        ELEVENLABS_API_KEY: 'batasManusia_elevenLabsKey'
+    };
+    
+    let generatedIdeas = [];
+    let selectedIdeaIndex = null;
+
+    const generateIdeasBtn = document.getElementById('generateIdeasBtn');
+    const ideaListDiv = document.getElementById('ideaList');
+    const selectedArea = document.getElementById('selectedArea');
+    const selectedDisplay = document.getElementById('selectedDisplay');
+    const generateScriptBtn = document.getElementById('generateScriptBtn');
+    const scriptContainer = document.getElementById('scriptContainer');
+    const scriptTextDiv = document.getElementById('scriptText');
+    const scenePromptsDiv = document.getElementById('scenePrompts');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const elevenLabsKeyInput = document.getElementById('elevenLabsKeyInput');
+    
+    // Audio elements
+    const audioContainer = document.getElementById('audioContainer');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audioLoading = document.getElementById('audioLoading');
+
+    // Load saved API keys from localStorage on page load
+    function loadSavedKeys() {
+        const savedGroqKey = localStorage.getItem(STORAGE_KEYS.GROQ_API_KEY);
+        if (savedGroqKey) {
+            apiKeyInput.value = savedGroqKey;
+        }
+        
+        const savedElevenLabsKey = localStorage.getItem(STORAGE_KEYS.ELEVENLABS_API_KEY);
+        if (savedElevenLabsKey) {
+            elevenLabsKeyInput.value = savedElevenLabsKey;
+        }
+    }
+
+    // Save API key to localStorage
+    function saveApiKey(key, value) {
+        if (value) {
+            localStorage.setItem(key, value);
+        } else {
+            localStorage.removeItem(key);
+        }
+    }
+
+    function getApiKey() {
+        return apiKeyInput.value.trim();
+    }
+
+    function getElevenLabsKey() {
+        return elevenLabsKeyInput.value.trim();
+    }
+
+    function isValidApiKey(key) {
+        return key.startsWith('gsk_') && key.length > 20;
+    }
+
+    // Auto-save when keys change
+    apiKeyInput.addEventListener('input', () => {
+        saveApiKey(STORAGE_KEYS.GROQ_API_KEY, getApiKey());
+    });
+
+    elevenLabsKeyInput.addEventListener('input', () => {
+        saveApiKey(STORAGE_KEYS.ELEVENLABS_API_KEY, getElevenLabsKey());
+    });
+
+    // Generate audio file from text using ElevenLabs
+    async function generateAudioFile(text) {
+        const apiKey = getElevenLabsKey();
+        if (!apiKey) {
+            audioContainer.style.display = 'none';
+            return null;
+        }
+
+        try {
+            audioLoading.style.display = 'flex';
+            audioContainer.style.display = 'block';
+            
+            // Hapus audio source sebelumnya
+            audioPlayer.src = '';
+            
+            const response = await fetch(`${ELEVENLABS_URL}/text-to-speech/${RACHEL_VOICE_ID}`, {
+                method: 'POST',
+                headers: {
+                    'xi-api-key': apiKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: text,
+                    model_id: 'eleven_multilingual_v2',
+                    voice_settings: {
+                        stability: 0.75,
+                        similarity_boost: 0.75, 
+                        style: 0.0, 
+                        speed: 1.0,
+                        use_speaker_boost: true
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail?.message || 'Gagal generate suara');
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            
+            // Set audio source
+            audioPlayer.src = audioUrl;
+            audioPlayer.load();
+            
+            // Sembunyikan loading
+            audioLoading.style.display = 'none';
+            
+            return audioUrl;
+            
+        } catch (error) {
+            console.error('TTS error:', error);
+            audioLoading.style.display = 'none';
+            audioContainer.style.display = 'none';
+            return null;
+        }
+    }
+
+    generateIdeasBtn.addEventListener('click', async () => {
+        const apiKey = getApiKey();
+        
+        if (!apiKey) {
+            ideaListDiv.innerHTML = `<div class="error-message">❌ Masukkan API Key</div>`;
+            return;
+        }
+        
+        if (!isValidApiKey(apiKey)) {
+            ideaListDiv.innerHTML = `<div class="error-message">❌ Format key harus "gsk_" + minimal 20 karakter</div>`;
+            return;
+        }
+
+        generateIdeasBtn.disabled = true;
+        generateIdeasBtn.innerHTML = '⏳ memproses...';
+        ideaListDiv.innerHTML = `<div style="padding: 1.5rem; color:#666666; text-align:center;">⏳ mencari 5 ide fresh...</div>`;
+
+        try {
+            // Hanya minta 5 judul ide dengan variasi fresh
+            const ideas = await callGroqForIdeas(apiKey, 5);
+            generatedIdeas = ideas;
+            renderIdeaList(ideas);
+            selectedArea.style.display = 'none';
+            scriptContainer.style.display = 'none';
+            selectedIdeaIndex = null;
+            
+        } catch (e) {
+            if (e.message.includes('401') || e.message.includes('Invalid API Key')) {
+                ideaListDiv.innerHTML = `<div class="error-message">❌ API Key tidak valid. <a href="https://console.groq.com/keys" target="_blank" style="color:#b91c1c;">Cek di sini</a></div>`;
+            } else {
+                ideaListDiv.innerHTML = `<div class="error-message">❌ Gagal: ${e.message}</div>`;
+            }
+        } finally {
+            generateIdeasBtn.disabled = false;
+            generateIdeasBtn.innerHTML = '✨ generate 5 ide fresh';
+        }
+    });
+
+    function selectIdea(index) {
+        selectedIdeaIndex = index;
+        const items = document.querySelectorAll('.idea-item');
+        items.forEach((item, i) => {
+            if (i === index) item.classList.add('selected');
+            else item.classList.remove('selected');
+        });
+        selectedDisplay.innerText = `✔ ide terpilih: ${generatedIdeas[index]}`;
+        selectedArea.style.display = 'block';
+        scriptContainer.style.display = 'none';
+    }
+
+    function renderIdeaList(ideas) {
+        if (!ideas || ideas.length === 0) {
+            ideaListDiv.innerHTML = `<div style="padding:1.5rem; text-align:center;">tidak ada ide</div>`;
+            return;
+        }
+        let html = '';
+        ideas.forEach((idea, idx) => {
+            html += `
+                <div class="idea-item" data-index="${idx}">
+                    <div class="idea-number">${idx+1}</div>
+                    <div class="idea-content">
+                        <!-- Hanya judul, tanpa deskripsi -->
+                        <div class="idea-title">${idea}</div>
+                    </div>
+                </div>
+            `;
+        });
+        ideaListDiv.innerHTML = html;
+        document.querySelectorAll('.idea-item').forEach((el) => {
+            el.addEventListener('click', (e) => {
+                const index = parseInt(el.dataset.index, 10);
+                selectIdea(index);
+            });
+        });
+    }
+
+    // Fungsi untuk copy teks dengan feedback
+    async function copyText(button, text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            button.classList.add('copied');
+            button.innerHTML = '✓ copied';
+            setTimeout(() => {
+                button.classList.remove('copied');
+                button.innerHTML = '📋 copy';
+            }, 2000);
+        } catch (err) {
+            alert('Gagal menyalin teks');
+        }
+    }
+
+    // Fungsi untuk toggle tampilan prompt lengkap
+    function toggleFullPrompt(showMoreEl) {
+        const fullDiv = showMoreEl.parentElement.querySelector('.prompt-full');
+        if (fullDiv.style.display === 'none' || !fullDiv.style.display) {
+            fullDiv.style.display = 'block';
+            showMoreEl.textContent = 'sembunyikan';
+        } else {
+            fullDiv.style.display = 'none';
+            showMoreEl.textContent = 'lihat selengkapnya';
+        }
+    }
+
+    generateScriptBtn.addEventListener('click', async () => {
+        if (selectedIdeaIndex === null || !generatedIdeas[selectedIdeaIndex]) return;
+
+        const apiKey = getApiKey();
+        if (!apiKey || !isValidApiKey(apiKey)) {
+            alert('API Key tidak valid');
+            return;
+        }
+
+        const selectedIdea = generatedIdeas[selectedIdeaIndex];
+        generateScriptBtn.disabled = true;
+        generateScriptBtn.innerHTML = '⏳ menyusun naskah...';
+        scriptContainer.style.display = 'block';
+        scriptTextDiv.innerText = 'Menunggu Groq...';
+        scenePromptsDiv.innerHTML = '';
+        
+        // Sembunyikan audio container saat loading
+        audioContainer.style.display = 'none';
+
+        try {
+            const scriptData = await callGroqForScript(apiKey, selectedIdea);
+            scriptTextDiv.innerText = scriptData.script;
+
+            // Generate audio file jika ElevenLabs key tersedia
+            if (getElevenLabsKey()) {
+                await generateAudioFile(scriptData.script);
+            }
+
+            let scenesHtml = '';
+            scriptData.scenes.forEach((scene, idx) => {
+                // Buat versi pendek untuk image dan video prompt (100 karakter pertama)
+                const shortImage = scene.imagePrompt.length > 100 ? scene.imagePrompt.substring(0, 100) + '...' : scene.imagePrompt;
+                const shortVideo = scene.videoPrompt.length > 100 ? scene.videoPrompt.substring(0, 100) + '...' : scene.videoPrompt;
+
+                scenesHtml += `
+                    <div class="scene-prompt">
+                        <div class="scene-title">⏱️ ${scene.time || 'scene '+(idx+1)}</div>
+                        
+                        <!-- Image prompt -->
+                        <div class="prompt-container">
+                            <div class="prompt-header">
+                                <span class="badge">🖼️ IMAGE PROMPT</span>
+                                <button class="copy-btn" onclick="copyText(this, \`${scene.imagePrompt.replace(/`/g, '\\`')}\`)">📋 copy</button>
+                            </div>
+                            <div class="prompt-text">${shortImage}</div>
+                            ${scene.imagePrompt.length > 100 ? 
+                                `<div class="prompt-full">${scene.imagePrompt}</div>
+                                 <span class="show-more" onclick="toggleFullPrompt(this)">lihat selengkapnya</span>` 
+                                : ''}
+                        </div>
+
+                        <!-- Video prompt -->
+                        <div class="prompt-container">
+                            <div class="prompt-header">
+                                <span class="badge">🎥 VIDEO PROMPT</span>
+                                <button class="copy-btn" onclick="copyText(this, \`${scene.videoPrompt.replace(/`/g, '\\`')}\`)">📋 copy</button>
+                            </div>
+                            <div class="prompt-text">${shortVideo}</div>
+                            ${scene.videoPrompt.length > 100 ? 
+                                `<div class="prompt-full">${scene.videoPrompt}</div>
+                                 <span class="show-more" onclick="toggleFullPrompt(this)">lihat selengkapnya</span>` 
+                                : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            scenePromptsDiv.innerHTML = scenesHtml;
+        } catch (e) {
+            scriptTextDiv.innerText = '❌ gagal';
+            if (e.message.includes('401')) alert('API Key tidak valid');
+        } finally {
+            generateScriptBtn.disabled = false;
+            generateScriptBtn.innerHTML = '🎬 buat naskah';
+        }
+    });
+
+    // Load saved keys on page load
+    loadSavedKeys();
+
+    // Fungsi untuk meminta 5 judul ide dengan variasi fresh
+    async function callGroqForIdeas(apiKey, count = 5) {
+        const prompt = `Buat ${count} ide video pendek yang SANGAT FRESH, MODERN, dan RELATE dengan kehidupan anak zaman sekarang (HP, notifikasi, earphone, scrolling, AC, ruangan tertutup, pola tidur berantakan).
+
+Tema: batas biologis tubuh manusia yang rusak secara perlahan karena kebiasaan kecil sehari-hari.
+Format judul: gunakan "Berapa lama..." atau "Apa yang terjadi jika..." atau "Berapa banyak..."
+
+Hindari topik klise seperti: tidak tidur total, tidak makan, tidak minum, menahan napas ekstrem.
+
+Fokus pada:
+- Kebiasaan mikro tapi terus-menerus
+- Paparan kecil tapi kronis
+- Hal yang terlihat sepele tapi berdampak biologis
+- Situasi yang sering terjadi pada pengguna HP dan internet
+
+Judul harus terasa:
+- Mengganggu
+- Bikin penasaran
+- Relatable
+- Sedikit ominous
+- Tidak terlalu panjang
+
+Tulis nomor 1-${count} saja. Hanya judul, tanpa deskripsi tambahan. Gunakan bahasa Indonesia.
+
+Contoh judul fresh:
+1. Berapa lama kamu bisa bertahan di ruangan kedap suara?
+2. Apa yang terjadi jika kamu mendengar infrasonik selama 8 jam?
+3. Berapa banyak pattern visual yang bisa membuatmu pusing?
+
+HASILKAN IDE YANG SANGAT BERBEDA DARI BIASANYA. Jangan terdengar seperti artikel kesehatan biasa.
+Buat seolah-olah ini rahasia tubuh yang jarang disadari. Jangan ulang ide yang itu-itu saja.`;
+
+        const body = {
+            model: GROQ_MODEL,
+            messages: [{ role: "user", content: prompt }],
+            temperature: 1.0,
+            max_tokens: 800
+        };
+
+        const resp = await fetch(GROQ_URL, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!resp.ok) {
+            const errData = await resp.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Error ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const content = data.choices[0]?.message?.content || "";
+
+        const lines = content.split('\n').filter(l => l.trim().match(/^\d+\./));
+        const ideas = [];
+        for (let line of lines) {
+            const withoutNumber = line.replace(/^\d+\.\s*/, '').trim();
+            if (withoutNumber) {
+                ideas.push(withoutNumber);
+            }
+        }
+        
+        while (ideas.length < count) {
+            const cadangan = [
+                "Berapa lama kamu bisa bertahan di ruangan dengan pola visual berulang?",
+                "Apa yang terjadi jika kamu mendengar suara frekuensi rendah selama 24 jam?",
+                "Berapa banyak gerakan repetitif yang bisa dilakukan tangan sebelum kram?",
+                "Berapa lama kamu bisa berdiri diam di satu tempat?",
+                "Apa yang terjadi jika kamu menatap layar biru selama 12 jam non-stop?"
+            ];
+            ideas.push(cadangan[ideas.length % cadangan.length]);
+        }
+        
+        return ideas.slice(0, count);
+    }
+
+    // Fungsi untuk script: naskah bahasa Indonesia dengan hook, prompt bahasa Inggris
+    async function callGroqForScript(apiKey, ideaTitle) {
+        // Template dasar untuk karakter yang konsisten dan detail komposisi yang diminta
+        const baseCharacterDescription = `Full-body shot, entire body visible from head to feet, feet clearly visible in frame, no cropping, centered composition, camera positioned 2 meters away, vertical 9:16 framing.
+
+Hyper-realistic cinematic 3D visualization of a humanoid skeleton figure, covered by a transparent glass-like outer body layer, visible anatomical skull with teeth and eyeballs, bright yellow irises with dark pupils, semi x-ray appearance, subtle internal rainbow light refraction, educational surreal realism, non-horror, non-cartoon, ultra-detailed, sharp focus, 8k. Ivory/pale beige bones, smooth medical-grade surfaces. Clean, clinical, modern style.`;
+
+        // Prompt untuk meminta LLM menghasilkan script dan scene, dengan instruksi eksplisit untuk menggunakan template karakter.
+        const systemPrompt = `You are a video scriptwriter for a viral YouTube Shorts channel. 
+
+Write a script in INDONESIAN language following this style: calm, clinical but conversational, slightly ominous, second-person ("kamu"), short sentences, simple language, everyday comparisons.
+
+Theme: ${ideaTitle}
+
+Script structure:
+- Start with the title as the opening line
+- Then ONE SENTENCE HOOK that grabs attention
+- Then time-based progression using "Selama X jam/hari/minggu" format
+- Include what you physically feel, what you mentally notice, one familiar comparison, one sudden realization moment
+- End with final irreversible failure and abrupt visual ending
+
+IMPORTANT: 
+- Must have a hook sentence right after the title
+- Use "Selama 1 jam", "Selama 6 jam", "Selama 1 hari", "Selama 3 hari", etc. NOT "Pada jam pertama" or "Pada hari pertama".
+
+Example format:
+${ideaTitle}
+[HOOK: satu kalimat yang bikin penasaran, misalnya "Tubuhmu diam-diam menghancurkan dirinya sendiri tanpa kamu sadari."]
+Selama 1 jam, kamu akan merasa... seperti... dan menyadari bahwa...
+Selama 6 jam, kamu akan...
+Selama 1 hari, kamu akan...
+Selama 3 hari, tubuhmu mulai...
+Akhirnya, pada hari ke-5, ...
+
+After the script, create 3-5 scene breakdowns for visuals. For each scene include (use ENGLISH for these prompts):
+- Time checkpoint
+- Environment
+- COMPLETE IMAGE PROMPT in English. For the character description, you MUST use the following template. You can add specific poses/actions relevant to the scene after this description.
+
+Character Template:
+${baseCharacterDescription}
+
+For the IMAGE PROMPT, combine the character template with the specific pose/action for that scene, the environment description, and lighting details. Ensure the shot remains full-body, centered, vertical 9:16, camera 2 meters away.
+
+- IMAGE-TO-VIDEO PROMPT in English (subtle movement, minimal motion, slight camera drift). Also ensure the character remains the same.
+
+Format:
+===SCRIPT===
+(script in Indonesian with title, hook, and "Selama..." format)
+===SCENES===
+Scene 1:
+Time: ...
+Environment: ...
+Image prompt: [full description in English, using the character template + specific pose/action]
+Video prompt: [description in English]`;
+
+        const body = {
+            model: GROQ_MODEL,
+            messages: [{ role: "user", content: systemPrompt }],
+            temperature: 0.8,
+            max_tokens: 3500
+        };
+
+        const resp = await fetch(GROQ_URL, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!resp.ok) {
+            const errData = await resp.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Error ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const fullContent = data.choices[0]?.message?.content || "";
+
+        let scriptPart = "";
+        let scenesPart = "";
+        if (fullContent.includes("===SCRIPT===") && fullContent.includes("===SCENES===")) {
+            const parts = fullContent.split("===SCENES===");
+            scriptPart = parts[0].replace("===SCRIPT===", "").trim();
+            scenesPart = parts[1] || "";
+        } else {
+            // Fallback jika format tidak sesuai, asumsikan seluruh konten adalah script
+            scriptPart = fullContent;
+        }
+
+        // Parse scenes dengan regex (English prompts)
+        const sceneRegex = /Scene\s*\d+:\s*Time:\s*(.*?)\s*Environment:\s*(.*?)\s*Image prompt:\s*(.*?)\s*Video prompt:\s*(.*?)(?=\n\s*Scene|\n*$)/gis;
+        const scenes = [];
+        let match;
+        while ((match = sceneRegex.exec(scenesPart)) !== null) {
+            scenes.push({
+                time: match[1].trim(),
+                environment: match[2].trim(),
+                imagePrompt: match[3].trim(),
+                videoPrompt: match[4].trim()
+            });
+        }
+
+        // Jika scene tidak terdeteksi, buat scene default dengan deskripsi anatomi lengkap dan komposisi yang diminta
+        if (scenes.length === 0) {
+            // Gunakan template karakter yang sudah didefinisikan
+            for (let i = 0; i < 3; i++) {
+                const pose = i === 0 ? "The skeleton figure stands in the center of a clean white room, arms resting naturally at its sides, head slightly tilted downward as if inspecting the floor. Fluorescent ceiling light above, soft natural lighting, minimal shadows." : 
+                            (i === 1 ? "The skeleton figure sits on a simple wooden chair, hands resting on its thighs, staring blankly at a wall. Soft light from a nearby window creates gentle shadows on the floor." : 
+                            "The skeleton figure lies on a minimalist bed, arms crossed over its chest, eyes open staring at the ceiling. Dim ambient lighting, long soft shadows, late afternoon feel.");
+                
+                scenes.push({
+                    time: i === 0 ? "Hour 1" : (i === 1 ? "Day 1" : "Day 3"),
+                    environment: i === 0 ? "Clean white room" : (i === 1 ? "Simple room with chair" : "Minimalist bedroom"),
+                    imagePrompt: `Full-body shot, entire body visible from head to feet, feet clearly visible in frame, no cropping, centered composition, camera positioned 2 meters away, vertical 9:16 framing.
+
+Hyper-realistic cinematic 3D visualization of a humanoid skeleton figure, covered by a transparent glass-like outer body layer, visible anatomical skull with teeth and eyeballs, bright yellow irises with dark pupils, semi x-ray appearance, subtle internal rainbow light refraction, educational surreal realism, non-horror, non-cartoon, ultra-detailed, sharp focus, 8k. Ivory/pale beige bones, smooth medical-grade surfaces. Clean, clinical, modern style.
+
+${pose}`,
+                    videoPrompt: i === 0 ? "Extremely slow camera push-in from 2 meters to 1.5 meters. The figure's chest rises and falls almost imperceptibly. Subtle refractions of light inside the glass layer shift as the camera moves." : 
+                                (i === 1 ? "Camera very slowly orbits around the seated figure from left to right. The figure's head turns slightly to follow the camera movement. Ambient light gently shifts across the surface." : 
+                                "Camera hovers steadily above the lying figure, then very slowly descends. The figure's eyes blink once, very slowly. Faint shimmer of internal light.")
+                });
+            }
+        } else {
+            // Jika scene berhasil diparse, pastikan setiap scene mengandung template karakter dan komposisi yang diminta
+            // Kita akan menambahkan template di awal image prompt jika belum ada, dan pastikan video prompt menyebutkan karakter yang sama.
+            // Tapi karena instruksi di system prompt sudah meminta LLM untuk menggunakan template, seharusnya sudah benar.
+            // Namun kita tetap lakukan sanitasi ringan untuk memastikan.
+            scenes.forEach(scene => {
+                if (!scene.imagePrompt.includes("Full-body shot")) {
+                    scene.imagePrompt = `Full-body shot, entire body visible from head to feet, feet clearly visible in frame, no cropping, centered composition, camera positioned 2 meters away, vertical 9:16 framing.\n\nHyper-realistic cinematic 3D visualization of a humanoid skeleton figure, covered by a transparent glass-like outer body layer, visible anatomical skull with teeth and eyeballs, bright yellow irises with dark pupils, semi x-ray appearance, subtle internal rainbow light refraction, educational surreal realism, non-horror, non-cartoon, ultra-detailed, sharp focus, 8k. Ivory/pale beige bones, smooth medical-grade surfaces. Clean, clinical, modern style.\n\n${scene.imagePrompt}`;
+                }
+                if (!scene.videoPrompt.toLowerCase().includes("skeleton")) {
+                    scene.videoPrompt = "The same transparent skeleton figure, " + scene.videoPrompt;
+                }
+            });
+        }
+
+        return {
+            script: scriptPart || "Gagal menghasilkan naskah. Coba lagi.",
+            scenes: scenes
+        };
+    }
+
+    // Expose functions to global scope for onclick handlers
+    window.copyText = copyText;
+    window.toggleFullPrompt = toggleFullPrompt;
+</script>
+</body>
+</html>
