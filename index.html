@@ -977,8 +977,8 @@ Buat seolah-olah ini rahasia tubuh yang jarang disadari. Jangan ulang ide yang i
     // Fungsi untuk script: naskah bahasa Indonesia dengan hook, prompt bahasa Inggris
     async function callGroqForScript(apiKey, ideaTitle) {
         // Template dasar untuk karakter yang konsisten dan detail komposisi yang diminta
-        const baseCharacterDescription = `Full-body shot, entire body visible from head to feet, feet clearly visible in frame, no cropping, centered composition, camera positioned 2 meters away, vertical 9:16 framing.
-
+        const baseCharacterDescription = `STRICT FULL BODY SHOT. Entire body visible from head to feet. Feet fully visible and not cut off. No cropping. No close-up. No medium shot. Wide angle lens. Camera positioned 2 meters away. Subject occupies only 70% of vertical frame height. Centered composition. Vertical 9:16 framing.
+        
 Hyper-realistic cinematic 3D visualization of a humanoid skeleton figure, covered by a transparent glass-like outer body layer, visible anatomical skull with teeth and eyeballs, bright yellow irises with dark pupils, semi x-ray appearance, subtle internal rainbow light refraction, educational surreal realism, non-horror, non-cartoon, ultra-detailed, sharp focus, 8k. Ivory/pale beige bones, smooth medical-grade surfaces. Clean, clinical, modern style.`;
 
         // Prompt untuk meminta LLM menghasilkan script dan scene, dengan instruksi eksplisit untuk menggunakan template karakter.
@@ -1089,8 +1089,8 @@ Video prompt: [description in English]`;
                 scenes.push({
                     time: i === 0 ? "Hour 1" : (i === 1 ? "Day 1" : "Day 3"),
                     environment: i === 0 ? "Clean white room" : (i === 1 ? "Simple room with chair" : "Minimalist bedroom"),
-                    imagePrompt: `Full-body shot, entire body visible from head to feet, feet clearly visible in frame, no cropping, centered composition, camera positioned 2 meters away, vertical 9:16 framing.
-
+                    imagePrompt: `STRICT FULL BODY SHOT. Entire body visible from head to feet. Feet fully visible and not cut off. No cropping. No close-up. No medium shot. Wide angle lens. Camera positioned 2 meters away. Subject occupies only 70% of vertical frame height. Centered composition. Vertical 9:16 framing.
+                    
 Hyper-realistic cinematic 3D visualization of a humanoid skeleton figure, covered by a transparent glass-like outer body layer, visible anatomical skull with teeth and eyeballs, bright yellow irises with dark pupils, semi x-ray appearance, subtle internal rainbow light refraction, educational surreal realism, non-horror, non-cartoon, ultra-detailed, sharp focus, 8k. Ivory/pale beige bones, smooth medical-grade surfaces. Clean, clinical, modern style.
 
 ${pose}`,
@@ -1105,7 +1105,7 @@ ${pose}`,
             // Tapi karena instruksi di system prompt sudah meminta LLM untuk menggunakan template, seharusnya sudah benar.
             // Namun kita tetap lakukan sanitasi ringan untuk memastikan.
             scenes.forEach(scene => {
-                if (!scene.imagePrompt.includes("Full-body shot")) {
+                if (!scene.imagePrompt.includes("STRICT FULL BODY SHOT")) {
                     scene.imagePrompt = `Full-body shot, entire body visible from head to feet, feet clearly visible in frame, no cropping, centered composition, camera positioned 2 meters away, vertical 9:16 framing.\n\nHyper-realistic cinematic 3D visualization of a humanoid skeleton figure, covered by a transparent glass-like outer body layer, visible anatomical skull with teeth and eyeballs, bright yellow irises with dark pupils, semi x-ray appearance, subtle internal rainbow light refraction, educational surreal realism, non-horror, non-cartoon, ultra-detailed, sharp focus, 8k. Ivory/pale beige bones, smooth medical-grade surfaces. Clean, clinical, modern style.\n\n${scene.imagePrompt}`;
                 }
                 if (!scene.videoPrompt.toLowerCase().includes("skeleton")) {
