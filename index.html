@@ -670,26 +670,25 @@
 
     // Fungsi untuk meminta 5 judul ide dengan variasi fresh
     async function callGroqForIdeas(apiKey, count = 5) {
-        const prompt = `Buat ${count} ide video pendek yang FRESH dan UNIK tentang batas tubuh manusia. Hindari ide-ide klise seperti: tidak tidur, tidak makan, tidak minum, menahan napas, atau olahraga ekstrem.
+        const prompt = `Buat ${count} ide video pendek yang SANGAT FRESH, MODERN, dan RELATE dengan kehidupan anak zaman sekarang (HP, notifikasi, earphone, scrolling, AC, ruangan tertutup, pola tidur berantakan).
 
-Cari topik-topik yang jarang dibahas, misalnya:
-- Efek dari suara tertentu (infrasonik, white noise terus-menerus)
-- Paparan layar biru berjam-jam
-- Berdiri terlalu lama di tempat
-- Menatap satu titik terus-menerus
-- Mengulang gerakan yang sama ribuan kali
-- Isolasi sensorik (tanpa suara, tanpa cahaya)
-- Kebisingan visual (pattern yang mengganggu)
-- Gangguan ritme sirkadian dari cahaya buatan
-- Dehidrasi ringan tapi kronis
-- Duduk dengan posisi yang salah terus-menerus
-- Paparan getaran dalam waktu lama
-- Kebiasaan menahan kencing terlalu sering
-- Menahan bersin atau sendawa
-- Makan makanan yang sama setiap hari
-- Kebisingan frekuensi rendah dari AC atau kipas
-
+Tema: batas biologis tubuh manusia yang rusak secara perlahan karena kebiasaan kecil sehari-hari.
 Format judul: gunakan "Berapa lama..." atau "Apa yang terjadi jika..." atau "Berapa banyak..."
+
+Hindari topik klise seperti: tidak tidur total, tidak makan, tidak minum, menahan napas ekstrem.
+
+Fokus pada:
+- Kebiasaan mikro tapi terus-menerus
+- Paparan kecil tapi kronis
+- Hal yang terlihat sepele tapi berdampak biologis
+- Situasi yang sering terjadi pada pengguna HP dan internet
+
+Judul harus terasa:
+- Mengganggu
+- Bikin penasaran
+- Relatable
+- Sedikit ominous
+- Tidak terlalu panjang
 
 Tulis nomor 1-${count} saja. Hanya judul, tanpa deskripsi tambahan. Gunakan bahasa Indonesia.
 
@@ -698,7 +697,8 @@ Contoh judul fresh:
 2. Apa yang terjadi jika kamu mendengar infrasonik selama 8 jam?
 3. Berapa banyak pattern visual yang bisa membuatmu pusing?
 
-HASILKAN IDE YANG SANGAT BERBEDA DARI BIASANYA. Jangan ulang ide yang itu-itu saja.`;
+HASILKAN IDE YANG SANGAT BERBEDA DARI BIASANYA. Jangan terdengar seperti artikel kesehatan biasa.
+Buat seolah-olah ini rahasia tubuh yang jarang disadari. Jangan ulang ide yang itu-itu saja.`;
 
         const body = {
             model: GROQ_MODEL,
