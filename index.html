@@ -1168,35 +1168,162 @@ Scene 2:
                 const error = new Error('Format response tidak sesuai');
                 error.rawResponse = rawResponse;
                 throw error;
-            }
+async function callGroqForScript(apiKey, ideaTitle) {
+    const systemPrompt = `You are a video scriptwriter for a viral YouTube Shorts channel. 
 
-            const sceneRegex = /Scene\s*\d+.*?:\s*Time:\s*(.*?)\s*Environment:\s*(.*?)\s*Image prompt:\s*(.*?)\s*Video prompt:\s*(.*?)(?=\n\s*Scene|\n*$)/gis;
-            const scenes = [];
-            let match;
-            
-            while ((match = sceneRegex.exec(scenesPart)) !== null) {
-                scenes.push({
-                    time: match[1].trim(),
-                    environment: match[2].trim(),
-                    imagePrompt: match[3].trim(),
-                    videoPrompt: match[4].trim(),
-                    narration: scriptPart
-                });
-            }
+Write a script in INDONESIAN language based on this title: "${ideaTitle}"
 
-            if (scenes.length === 0) {
-                const error = new Error('Tidak ada scene yang ditemukan');
-                error.rawResponse = rawResponse;
-                throw error;
-            }
+GAYA PENULISAN: Tenang, klinis tapi conversational, second-person ("kamu"), kalimat pendek.
 
-            return { script: scriptPart, scenes: scenes };
-            
-        } catch (error) {
-            console.error('Error:', error);
+STRUKTUR SCRIPT:
+1. Buka dengan judul
+2. HOOK: satu kalimat penasaran
+3. Timeline dengan "Selama X [satuan waktu]"
+4. Fokus pada organ yang disebutkan
+5. Akhiri dengan kegagalan total
+
+CONTOH script:
+${ideaTitle}
+Tanpa kamu sadari, [organ]-mu sedang mengalami [proses kerusakan].
+Selama [waktu 1], [deskripsi kondisi awal].
+Selama [waktu 2], [deskripsi progres kerusakan].
+Selama [waktu 3], [deskripsi kerusakan parah].
+Pada [waktu akhir], [organ]-mu [KATA KERJA EKSTREM] total.
+
+After the script, create 3-5 scene breakdowns. 
+
+**CRITICAL RULE FOR ENVIRONMENT:**
+The ENVIRONMENT for each scene MUST be DIRECTLY INFERRED from the script's timeline and context.
+
+Examples of ENVIRONMENT based on activity:
+- Angkat beban → HARUS "heavy industrial gym", "weightlifting platform", "powerlifting gym", "training facility with squat racks"
+- Lari/jogging → HARUS "outdoor running track", "park with jogging path", "treadmill at gym"
+- Main game → HARUS "dark gaming room with RGB lights", "esports arena", "gaming setup with multiple monitors"
+- Merokok → HARUS "living room with ashtrays", "balcony at night", "smoking area"
+- Makan pedas → HARUS "kitchen table", "restaurant with spicy food", "food court"
+
+**NEVER use generic environments like:**
+- "latar belakang abu-abu" (gray background)
+- "ruangan kosong" (empty room)
+- "berdiri di depan cermin" (standing in front of mirror) - unless script specifically mentions checking form in mirror
+- "warna abu-abu" (gray color)
+
+**FOR EACH IMAGE PROMPT, use this EXACT formula:**
+
+"Place the skeleton character [SPECIFIC ACTION based on script timeline] + [SPECIFIC ENVIRONMENT that matches the activity] + [SPECIFIC PROPS related to activity] + [SPECIFIC LIGHTING that fits the mood] + [SPECIFIC CAMERA ANGLE that emphasizes the action] + [SPECIFIC VISUAL EFFECTS that enhance realism]. Rendered in clean cinematic 3D, highly detailed."
+
+**EXAMPLES OF GOOD VS BAD PROMPTS:**
+
+❌ BAD (generic, doesn't match context):
+"Place the skeleton character melakukan angkat beban dengan barbel di tangan, berdiri di depan cermin, dengan latar belakang warna abu-abu, cahaya putih, sudut kamera 45 derajat, efek visual bayangan, Rendered in clean cinematic 3D, highly detailed."
+
+✅ GOOD (specific, matches gym context):
+"Place the skeleton character inside a heavy industrial gym, performing a maximum deadlift with an overloaded barbell, sweat visible on its transparent skull, standing on a rubber lifting platform with weight plates scattered around. Use dramatic top-down gym lighting and shoot from a low front cinematic angle to emphasize strain and muscle tension. Add subtle chalk dust particles floating in the air, tense body posture with veins bulging through transparent skin, and slight camera shake effect from the weight impact. Rendered in clean cinematic 3D, highly detailed."
+
+✅ GOOD (progressive scenes that match timeline):
+
+Scene 1 (Pemanasan - 0 menit):
+"Place the skeleton character in a well-lit industrial gym with yellow overhead lights, standing at a squat rack, doing light warm-up reps with an empty barbell to test grip, multiple weight racks visible in background with other gym equipment. Use warm ambient lighting and a medium wide shot showing proper form. Add subtle dust particles and clean gym atmosphere with mirrors on walls reflecting the space. Rendered in clean cinematic 3D, highly detailed."
+
+Scene 2 (Menit ke-5 - tekanan mulai terasa):
+"Place the skeleton character on a deadlift platform in the same gym, now loading heavy 100kg plates onto the barbell, hands gripping the knurling tightly, transparent chest showing heart racing with visible blood flow pulsing faster. Use dramatic side lighting from gym windows and a low angle shot emphasizing the weight being loaded. Add sweat beginning to form on the skull and slight tension in the skeletal frame. Rendered in clean cinematic 3D, highly detailed."
+
+Scene 3 (Menit ke-10 - tekanan maksimal):
+"Place the skeleton character in the middle of a heavy deadlift at 180kg, back straight, arms locked, veins bulging visibly through transparent arms and neck, face contorted in effort, blood vessels in the chest area starting to show stress marks like cracks in glass. Use harsh top-down industrial lighting creating deep shadows under the barbell and a tight close-up shot on the straining arms and chest. Add chalk dust exploding from grip, sweat droplets flying, and subtle red glow indicating vascular pressure. Rendered in clean cinematic 3D, highly detailed."
+
+Scene 4 (Menit ke-12 - PEMBULUH DARAH ROBEK):
+"Place the skeleton character collapsed on the gym floor beside the dropped barbell, weights still rattling, transparent body revealing multiple blood vessels in the chest and arms burst open with internal bleeding visible as red mist spreading through the transparent tissue, eyes wide open and lifeless. Use emergency lighting effect with flickering gym lights and a dramatic overhead shot showing the full collapse. Add blood particles dispersing through transparent body, weight plates still spinning on the bar, and distant gym-goers rushing to help in background blur. Rendered in clean cinematic 3D, highly detailed."
+
+**ENVIRONMENT CHECKLIST for Each Scene:**
+- [ ] Apakah lingkungan SPESIFIK untuk aktivitas? (gym, dapur, kamar gaming, dll)
+- [ ] Apakah PROPS sesuai? (barbel, panci pedas, controller, rokok)
+- [ ] Apakah SUASANA berubah sesuai timeline? (bersih → berantakan → chaos)
+- [ ] Apakah PENCAHAYAAN mendukung mood? (cerah → suram → dramatis)
+- [ ] Apakah DETAIL kecil ada? (chalk dust, asap, keringat, uap)
+
+**CRITICAL RULES:**
+- Scene 1 MUST establish the ENVIRONMENT clearly
+- Each scene's environment MUST evolve with the timeline
+- NEVER use generic backgrounds
+- The character MUST interact with the environment naturally
+- Props MUST show progression (empty ashtray → full ashtray, light weights → heavy weights)
+
+Format output:
+===SCRIPT===
+(script in Indonesian)
+===SCENES===
+Scene 1:
+Time: [from script - MUST include specific time like "Pemanasan - 0 menit"]
+Environment: [SPECIFIC location with details]
+Image prompt: [Place the skeleton character... Rendered in clean cinematic 3D, highly detailed.]
+Video prompt: [subtle movement description]
+
+Scene 2:
+...`;
+
+    const body = {
+        model: GROQ_MODEL,
+        messages: [{ role: "user", content: systemPrompt }],
+        temperature: 0.8,
+        max_tokens: 6000
+    };
+
+    try {
+        const resp = await fetch(GROQ_URL, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!resp.ok) {
+            const errData = await resp.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Error ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const fullContent = data.choices[0]?.message?.content || "";
+        const rawResponse = fullContent;
+
+        let scriptPart = "";
+        let scenesPart = "";
+        
+        if (fullContent.includes("===SCRIPT===") && fullContent.includes("===SCENES===")) {
+            const parts = fullContent.split("===SCENES===");
+            scriptPart = parts[0].replace("===SCRIPT===", "").trim();
+            scenesPart = parts[1] || "";
+        } else {
+            const error = new Error('Format response tidak sesuai');
+            error.rawResponse = rawResponse;
             throw error;
         }
+
+        const sceneRegex = /Scene\s*\d+.*?:\s*Time:\s*(.*?)\s*Environment:\s*(.*?)\s*Image prompt:\s*(.*?)\s*Video prompt:\s*(.*?)(?=\n\s*Scene|\n*$)/gis;
+        const scenes = [];
+        let match;
+        
+        while ((match = sceneRegex.exec(scenesPart)) !== null) {
+            scenes.push({
+                time: match[1].trim(),
+                environment: match[2].trim(),
+                imagePrompt: match[3].trim(),
+                videoPrompt: match[4].trim(),
+                narration: scriptPart
+            });
+        }
+
+        if (scenes.length === 0) {
+            const error = new Error('Tidak ada scene yang ditemukan');
+            error.rawResponse = rawResponse;
+            throw error;
+        }
+
+        return { script: scriptPart, scenes: scenes };
+        
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
     }
+}
 
     window.copyText = copyText;
     window.toggleFullPrompt = toggleFullPrompt;
