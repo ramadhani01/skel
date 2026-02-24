@@ -248,7 +248,12 @@ sections.forEach(sec=>{
     const start=text.indexOf(sec.label);
     if(start!==-1){
         const end=findNext(text,start,sections);
-        const content=text.substring(start+sec.label.length,end).trim();
+        let content=text.substring(start+sec.label.length,end).trim();
+
+if(sec.label === "[JUDUL]"){
+    content = content.split("\n")[0];
+    content = content.split(" - ")[0];
+}
 
         const box=document.createElement("div");
         box.className="section-box";
