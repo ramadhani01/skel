@@ -6,101 +6,166 @@
 <title>AI Shorts Studio PRO</title>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 body{
     margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
+    font-family:'Inter',sans-serif;
+    background: radial-gradient(circle at 20% 20%, #1a1a2e, #0f0f0f 60%);
     color:white;
+    overflow-x:hidden;
 }
+
+/* Animated glow background */
+body::before{
+    content:"";
+    position:fixed;
+    top:-200px;
+    left:-200px;
+    width:600px;
+    height:600px;
+    background:radial-gradient(circle,#ff3c00,transparent 70%);
+    opacity:0.15;
+    filter:blur(100px);
+    animation:floatGlow 8s ease-in-out infinite alternate;
+    z-index:-1;
+}
+
+@keyframes floatGlow{
+    from{transform:translate(0,0);}
+    to{transform:translate(100px,80px);}
+}
+
 .container{
     max-width:1200px;
     margin:auto;
-    padding:30px;
+    padding:40px 25px;
 }
+
 h1{
-    color:#ff3c00;
-    text-shadow:0 0 15px rgba(255,60,0,0.6);
+    font-size:32px;
+    background:linear-gradient(90deg,#ff3c00,#ff9900);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:700;
 }
+
 .card{
-    background:#121212;
-    padding:20px;
-    border-radius:14px;
-    margin-bottom:25px;
-    box-shadow:0 0 20px rgba(255,60,0,0.05);
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:30px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    transition:0.3s;
 }
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 40px rgba(255,60,0,0.2);
+}
+
 input{
     width:100%;
-    padding:12px;
-    border-radius:8px;
+    padding:14px;
+    border-radius:12px;
     border:none;
-    background:#1e1e1e;
+    background:rgba(255,255,255,0.07);
     color:white;
+    font-size:14px;
+    outline:none;
 }
+
 button{
-    padding:10px 18px;
+    padding:12px 20px;
     border:none;
-    border-radius:8px;
+    border-radius:12px;
     cursor:pointer;
-    font-weight:bold;
-    margin-top:10px;
-    background:#ff3c00;
+    font-weight:600;
+    margin-top:12px;
+    background:linear-gradient(90deg,#ff3c00,#ff7a00);
     color:white;
     transition:0.3s;
 }
+
 button:hover{
-    box-shadow:0 0 15px rgba(255,60,0,0.6);
+    transform:scale(1.05);
+    box-shadow:0 0 20px rgba(255,60,0,0.6);
 }
+
 .secondary{
-    background:#333;
+    background:rgba(255,255,255,0.08);
 }
+
 .idea{
-    background:#1a1a1a;
-    padding:12px;
-    border-radius:8px;
-    margin-top:10px;
+    background:rgba(255,255,255,0.05);
+    padding:14px;
+    border-radius:14px;
+    margin-top:12px;
     cursor:pointer;
     transition:0.3s;
+    border:1px solid transparent;
 }
+
 .idea:hover{
-    background:#242424;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,60,0,0.4);
     transform:scale(1.02);
 }
+
 .section-box{
-    background:#181818;
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:18px;
-    border:1px solid #2a2a2a;
+    background:rgba(255,255,255,0.04);
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.08);
     animation:fadeIn 0.6s ease forwards;
+    transition:0.3s;
 }
+
+.section-box:hover{
+    border:1px solid rgba(255,60,0,0.5);
+    box-shadow:0 0 25px rgba(255,60,0,0.2);
+}
+
 .section-title{
-    font-weight:bold;
-    color:#ff3c00;
-    margin-bottom:10px;
+    font-weight:700;
     font-size:16px;
+    margin-bottom:10px;
+    color:#ff7a00;
 }
+
 .section-content{
     white-space:pre-wrap;
-    line-height:1.6;
-    color:#ddd;
+    line-height:1.7;
+    color:#e0e0e0;
+    font-size:14px;
 }
+
 .copy-btn{
-    background:#333;
+    background:rgba(255,255,255,0.08);
     padding:6px 12px;
     font-size:12px;
-    margin-top:10px;
+    margin-top:12px;
+    border-radius:8px;
 }
+
 .success{
-    color:#00ff99;
+    color:#00ffb3;
 }
+
 .loading{
-    color:#888;
+    color:#999;
     font-style:italic;
 }
+
 @keyframes fadeIn{
-    from{opacity:0;transform:translateY(10px);}
+    from{opacity:0;transform:translateY(15px);}
     to{opacity:1;transform:translateY(0);}
 }
+
 </style>
 </head>
 <body>
