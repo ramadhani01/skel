@@ -3,78 +3,117 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AI Shorts Dashboard PRO</title>
+<title>AI Shorts Studio PRO</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial;
-    background:#0f0f0f;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#0f0f0f,#1a1a1a);
     color:white;
 }
 .container{
     max-width:1200px;
     margin:auto;
-    padding:20px;
+    padding:30px;
+}
+h1{
+    color:#ff3c00;
+    text-shadow:0 0 15px rgba(255,60,0,0.6);
 }
 .card{
-    background:#1a1a1a;
+    background:#121212;
     padding:20px;
-    border-radius:12px;
-    margin-bottom:20px;
+    border-radius:14px;
+    margin-bottom:25px;
+    box-shadow:0 0 20px rgba(255,60,0,0.05);
 }
-h1{color:#ff3c00;}
-input,textarea{
+input{
     width:100%;
-    padding:10px;
-    margin-top:10px;
-    border-radius:6px;
+    padding:12px;
+    border-radius:8px;
     border:none;
-    background:#2a2a2a;
+    background:#1e1e1e;
     color:white;
 }
 button{
     padding:10px 18px;
-    background:#ff3c00;
     border:none;
-    border-radius:6px;
-    color:white;
-    font-weight:bold;
+    border-radius:8px;
     cursor:pointer;
+    font-weight:bold;
+    margin-top:10px;
+    background:#ff3c00;
+    color:white;
+    transition:0.3s;
+}
+button:hover{
+    box-shadow:0 0 15px rgba(255,60,0,0.6);
+}
+.secondary{
+    background:#333;
+}
+.idea{
+    background:#1a1a1a;
+    padding:12px;
+    border-radius:8px;
+    margin-top:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+.idea:hover{
+    background:#242424;
+    transform:scale(1.02);
+}
+.section-box{
+    background:#181818;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:18px;
+    border:1px solid #2a2a2a;
+    animation:fadeIn 0.6s ease forwards;
+}
+.section-title{
+    font-weight:bold;
+    color:#ff3c00;
+    margin-bottom:10px;
+    font-size:16px;
+}
+.section-content{
+    white-space:pre-wrap;
+    line-height:1.6;
+    color:#ddd;
+}
+.copy-btn{
+    background:#333;
+    padding:6px 12px;
+    font-size:12px;
     margin-top:10px;
 }
-button:hover{opacity:0.85;}
-.idea{
-    background:#222;
-    padding:10px;
-    border-radius:6px;
-    margin-top:8px;
-    cursor:pointer;
+.success{
+    color:#00ff99;
 }
-.idea:hover{background:#333;}
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
 }
-.small-btn{
-    background:#444;
-    font-size:12px;
+.loading{
+    color:#888;
+    font-style:italic;
 }
-.success{color:#00ff99;}
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<h1>🔥 AI Shorts Dashboard PRO</h1>
+<h1>🔥 AI Shorts Studio PRO</h1>
 
 <div class="card">
 <h3>Groq API Key</h3>
 <input type="password" id="apiKeyInput" placeholder="Masukkan API Key">
 <button onclick="saveKey()">Simpan</button>
-<button class="small-btn" onclick="clearKey()">Hapus</button>
+<button class="secondary" onclick="clearKey()">Hapus</button>
 <div id="status"></div>
 </div>
 
@@ -84,10 +123,9 @@ button:hover{opacity:0.85;}
 </div>
 
 <div class="card">
-<h3>Full Production Output</h3>
-<textarea id="fullOutput" rows="20"></textarea>
-<button onclick="copyOutput()">Copy</button>
-<button onclick="exportJSON()">Export JSON</button>
+<h3>🎬 Production Studio Output</h3>
+<div id="productionContainer"></div>
+<button onclick="exportJSON()">Export Production JSON</button>
 </div>
 
 </div>
@@ -137,7 +175,8 @@ async function callGroq(prompt){
 }
 
 async function generateIdeas(){
-    ideas.innerHTML="Generating...";
+    ideas.innerHTML="<div class='loading'>Generating ideas...</div>";
+
     const prompt=`
 Buat 10 ide viral YouTube Shorts.
 Format:
@@ -163,44 +202,86 @@ Hindari topik klise.
 
 async function produceFull(idea){
 
-fullOutput.value="🚀 Producing full content system...\n";
+const container=document.getElementById("productionContainer");
+container.innerHTML="<div class='loading'>🚀 Producing cinematic production system...</div>";
 
 const masterPrompt=`
 Anda adalah sistem produksi YouTube Shorts profesional.
 
 Topik: ${idea}
 
-Buat output dengan struktur lengkap:
+Pisahkan output dengan label berikut:
 
-1. Judul CTR tinggi
-2. Script 45-60 detik (hook kuat, eskalasi progresif)
-3. Scene Breakdown 5 adegan (timestamp)
-4. Prompt gambar 8K UHD cinematic per scene
-   - Karakter wajib konsisten:
-   "Kerangka manusia berwarna putih yang tembus cahaya."
-5. Prompt video cinematic per scene
-6. Thumbnail prompt dramatis
-7. Deskripsi YouTube SEO
-8. 10 hashtag Shorts relevan
+[JUDUL]
+[SCRIPT]
+[SCENE]
+[IMAGE PROMPT]
+[VIDEO PROMPT]
+[THUMBNAIL]
+[SEO]
 
-Semua dalam format terstruktur rapi.
+Karakter visual harus selalu:
+"Kerangka manusia berwarna putih yang tembus cahaya."
 `;
 
 const result=await callGroq(masterPrompt);
-fullOutput.value=result;
+renderSections(result);
 }
 
-function copyOutput(){
-    fullOutput.select();
-    document.execCommand("copy");
-    alert("Copied!");
+function renderSections(text){
+
+const container=document.getElementById("productionContainer");
+container.innerHTML="";
+
+const sections=[
+    {label:"[JUDUL]",title:"🎬 Judul"},
+    {label:"[SCRIPT]",title:"🧠 Script"},
+    {label:"[SCENE]",title:"🎞 Scene Breakdown"},
+    {label:"[IMAGE PROMPT]",title:"🖼 Prompt Gambar 8K UHD"},
+    {label:"[VIDEO PROMPT]",title:"🎥 Prompt Video Cinematic"},
+    {label:"[THUMBNAIL]",title:"🔥 Thumbnail Prompt"},
+    {label:"[SEO]",title:"📈 SEO & Hashtag"}
+];
+
+sections.forEach(sec=>{
+    const start=text.indexOf(sec.label);
+    if(start!==-1){
+        const end=findNext(text,start,sections);
+        const content=text.substring(start+sec.label.length,end).trim();
+
+        const box=document.createElement("div");
+        box.className="section-box";
+
+        box.innerHTML=`
+            <div class="section-title">${sec.title}</div>
+            <div class="section-content">${content}</div>
+            <button class="copy-btn" onclick="copySection(this)">Copy</button>
+        `;
+
+        container.appendChild(box);
+    }
+});
+}
+
+function findNext(text,start,sections){
+    let next=text.length;
+    sections.forEach(sec=>{
+        const i=text.indexOf(sec.label,start+1);
+        if(i!==-1 && i<next) next=i;
+    });
+    return next;
+}
+
+function copySection(btn){
+    const text=btn.previousElementSibling.innerText;
+    navigator.clipboard.writeText(text);
+    btn.innerText="Copied ✔";
+    setTimeout(()=>btn.innerText="Copy",1500);
 }
 
 function exportJSON(){
-    const data={
-        content:fullOutput.value
-    };
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const content=document.getElementById("productionContainer").innerText;
+    const blob=new Blob([JSON.stringify({production:content},null,2)],{type:"application/json"});
     const a=document.createElement("a");
     a.href=URL.createObjectURL(blob);
     a.download="shorts-production-pack.json";
