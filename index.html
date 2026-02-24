@@ -1078,26 +1078,218 @@ BUAT JUDUL YANG EPIK DAN SESUAI DENGAN TEMA PETUALANGAN YANG DIPILIH!`
             if (!resp.ok) {
                 const errData = await resp.json().catch(() => ({}));
                 throw new Error(errData.error?.message || `Error ${resp.status}`);
-            }
+async function callGroqForScript(apiKey, ideaTitle, version, petualanganTheme = 'bajaklaut') {
+    // Theme-specific settings
+    const themeSettings = {
+        'bajaklaut': {
+            environment: 'kapal bajak laut di tengah lautan, pulau harta karun, gua bawah laut',
+            props: 'pedang, pistol kuno, kompas, peta harta karun, peti emas, tengkorak, botol rum, burung beo',
+            lighting: 'cahaya matahari terbenam di laut, cahaya obor di dalam gua, badai petir',
+            enemies: 'kraken, bajak laut lain, monster laut, tentara kerajaan'
+        },
+        'ksatria': {
+            environment: 'kastil megah, hutan terlarang, gunung berapi, ruang tahta',
+            props: 'pedang, perisai, baju zirah, tombak, panah, kuda, bendera kerajaan',
+            lighting: 'cahaya matahari pagi di kastil, cahaya api unggun, sinar bulan di hutan',
+            enemies: 'naga, raksasa, pasukan kegelapan, penyihir jahat'
+        },
+        'penjelajah': {
+            environment: 'hutan rimba, gunung tinggi, sungai deras, gua kristal',
+            props: 'ransel, kompas, tali, parang, tenda, perlengkapan panjat',
+            lighting: 'cahaya matahari menembus dedaunan, senja di pegunungan, cahaya kunang-kunang',
+            enemies: 'harimau, suku kanibal, ular raksasa, jebakan hutan'
+        },
+        'astronot': {
+            environment: 'luar angkasa, planet asing, stasiun luar angkasa, bulan',
+            props: 'helm astronot, roket, robot, laser, tabung oksigen',
+            lighting: 'cahaya bintang, sinar matahari di angkasa, lampu neon stasiun',
+            enemies: 'alien, meteor, lubang hitam, robot nakal'
+        },
+        'atlantis': {
+            environment: 'kota bawah laut, istana karang, jurang laut, kapal karam',
+            props: 'trisula, mutiara, kerang raksasa, peti harta karun, kendaraan laut',
+            lighting: 'cahaya matahari menembus air, cahaya bioluminesen, sinar bulan di permukaan',
+            enemies: 'hiu raksasa, gurita raksasa, penyihir laut, monster laut dalam'
+        },
+        'mesir': {
+            environment: 'piramida, padang pasir, kuil kuno, makam firaun',
+            props: 'tongkat firaun, topeng emas, gulungan papirus, perhiasan kuno, peti mati',
+            lighting: 'matahari terik di gurun, cahaya obor di dalam piramida, sinar bulan di padang pasir',
+            enemies: 'mumi hidup, kalajengking raksasa, dewa mesir, pasukan kegelapan'
+        },
+        'viking': {
+            environment: 'kapal panjang, fjord, desa viking, aula besar',
+            props: 'kapak, perisai bundar, helm bertanduk, tanduk minuman, kapal panjang',
+            lighting: 'matahari utara yang redup, cahaya api unggun, aurora borealis',
+            enemies: 'naga laut, prajurit musuh, raksasa es, roh jahat'
+        },
+        'samurai': {
+            environment: 'Jepang kuno, kuil, gunung Fuji, medan perang',
+            props: 'katana, wakizashi, baju samurai, topeng, shuriken',
+            lighting: 'cahaya matahari terbit, senja merah, cahaya lentera kertas',
+            enemies: 'ronin, ninja, oni (iblis), shogun jahat'
+        },
+        'cowboy': {
+            environment: 'padang pasir, kota koboi, bar, tambang emas',
+            props: 'revolver, topi koboi, kuda, laso, pelana, botol wiski',
+            lighting: 'matahari terik di padang pasir, senja merah, cahaya lampu minyak',
+            enemies: 'bandit, suku asli, sheriff korup, ular derik'
+        },
+        'dunia lain': {
+            environment: 'dunia game, dunia fantasi, dimensi paralel, negeri ajaib',
+            props: 'pedang legendaris, kristal ajaib, ramuan, peta sihir, koin emas',
+            lighting: 'cahaya magis, sinar kristal, lampu peri, api sihir',
+            enemies: 'boss level, monster fantasi, iblis, musuh terkuat'
+        }
+    };
 
-            const data = await resp.json();
-            const content = data.choices[0]?.message?.content || "";
-            const lines = content.split('\n').filter(l => l.trim().match(/^\d+\./));
-            const ideas = [];
-            
-            for (let line of lines) {
-                const withoutNumber = line.replace(/^\d+\.\s*/, '').trim();
-                if (withoutNumber) ideas.push(withoutNumber);
-            }
-            
-            if (ideas.length === 0) throw new Error('Tidak ada ide yang dihasilkan');
-            return ideas.slice(0, 5);
-            
-        } catch (error) {
-            console.error('Error:', error);
+    const theme = themeSettings[petualanganTheme] || themeSettings['bajaklaut'];
+
+    const systemPrompt = `You are a video scriptwriter for a viral YouTube Shorts channel with PETUALANGAN EPIK theme.
+
+TEMA PETUALANGAN: ${petualanganTheme}
+LINGKUNGAN: ${theme.environment}
+PROPERTI: ${theme.props}
+PENCAHAYAAN: ${theme.lighting}
+MUSUH: ${theme.enemies}
+
+Write a script in INDONESIAN language based on this title: "${ideaTitle}"
+
+**PENTING: DURASI VIDEO 50-70 DETIK, MAKA SETIAP SCENE HARUS 3-4 KALIMAT LENGKAP**
+
+GAYA PENULISAN: Naratif epik, menegangkan, cinematic, second-person ("kamu"), kalimat deskriptif panjang (3-4 kalimat per scene).
+
+STRUKTUR SCRIPT WAJIB DENGAN TIMELINE "Selama X [satuan waktu]" YANG PROGRESIF:
+
+1. Buka dengan JUDUL sebagai kalimat pertama
+
+2. **Scene 1 (Awal Petualangan - Kondisi Normal)** - Gunakan "Selama [waktu awal]" (3-4 kalimat)
+   - Deskripsikan memulai petualangan dengan semangat
+   - Kondisi fisik masih prima, organ masih sehat
+   - Lingkungan masih bersahabat
+
+3. **Scene 2 (Mulai Ada Tantangan - Kondisi Mulai Berubah)** - Gunakan "Selama [waktu lebih lama]" (3-4 kalimat)
+   - Mulai muncul hambatan pertama
+   - Organ mulai terasa sedikit tegang/lelah
+   - Tanda-tanda bahaya mulai terlihat
+
+4. **Scene 3 (Konflik Meningkat - Kondisi Memburuk)** - Gunakan "Selama [waktu lebih lama lagi]" (3-4 kalimat)
+   - Tantangan semakin berat
+   - Organ mulai terasa sakit/tertekan
+   - Lingkungan semakin berbahaya
+
+5. **Scene 4 (Klimaks - Kondisi Kritis)** - Gunakan "Selama [waktu paling lama]" (3-4 kalimat)
+   - Puncak petualangan, menghadapi musuh terkuat
+   - Organ di ambang batas, hampir hancur/gagal
+   - Aksi paling menegangkan
+
+6. **Scene 5 (Akhir - Kegagalan Total)** - Gunakan "Akhirnya, pada [waktu]" (3-4 kalimat)
+   - Kegagalan irreversibel
+   - Organ HANCUR/ERROR total sesuai judul
+   - Visual dramatis dan abrupt
+
+**CONTOH TIMELINE PROGRESIF YANG BENAR (BAJAK LAUT):**
+
+Berapa Hari Berlayar Mencari Harta Karun Sampai Jantungmu HANCUR?
+
+**Selama 3 hari pertama berlayar**, kamu berdiri tegak di haluan kapal, memegang peta kuno yang mulai usang dimakan usia. Angin laut bertiup sepoi-sepoi, membawa aroma asin yang menyegarkan paru-parumu. Jantungmu berdetak penuh semangat, mata bersinar membayangkan emas dan permata yang menunggu di pulau terpencil. Awak kapal bernyanyi riang, optimis bahwa petualangan ini akan mengubah nasib mereka selamanya.
+
+**Selama 7 hari berlayar**, gelombang mulai menghantam kapal dengan keras, membuat badan kapol terombang-ambing seperti daun kering. Kamu mulai merasakan jantung berdebar tidak karuan setiap kali ombak raksasa menerjang, dadamu sesak menahan rasa cemas yang terus mengganggu pikiran. Persediaan air bersih mulai menipis, beberapa awak kapal mulai menunjukkan tanda-tanda keracunan makanan laut. Senyum optimis perlahan memudar, digantikan kerutan dahi penuh kekhawatiran.
+
+**Selama 14 hari berlayar**, badai dahsyat menerjang tanpa ampun, langit hitam dan petir menyambar-nyambar di sekeliling kapal. Jantungmu berdetak begitu kencang hingga terasa seperti ingin menerobos keluar dari tulang rusuk, setiap detaknya menyisakan nyeri di dada sebelah kiri. Layar utama robek berkeping-keping, tiang kapal patah dan nyaris menimpa beberapa awak yang berusaha menyelamatkan diri. Kamu berteriak memberikan perintah di tengah deru angin, tapi suaramu tenggelam dalam hiruk-pikuk kiamat di lautan.
+
+**Selama 21 hari berlayar**, ketika kapal akhirnya mencapai pulau yang dituju, kamu justru berhadapan dengan Kraken raksasa yang menjaga gua harta karun. Jantungmu berhenti berdetak selama beberapa detik saat melihat mata merah mengerikan itu menatapmu dari kegelapan, lalu berdetak lagi dengan irama kacau dan tidak beraturan. Tentakel raksasa melilit kapal, menghancurkannya seperti mainan, sementara mulut Kraken terbuka lebar siap menelan semuanya. Kamu merasakan jantung seperti diremas tangan raksasa, nyeri luar biasa menjalar dari dada hingga ke ujung jari.
+
+**Akhirnya, pada hari ke-23**, jantungmu HANCUR total. Bukan karena serangan Kraken, tapi karena peta yang selama ini kamu ikuti ternyata PALSU. Kamu roboh di bibir pantai, tangan masih menggenggam erat peta terkutuk itu, sementara jantung yang hancur berserakan di dalam rongga dada yang transparan. Pasir putih perlahan menutupi tubuhmu, ombak membasuh tanpa peduli, dan Kraken kembali ke laut dalam meninggalkan mayat-mayat awak kapal. Petualangan yang dimulai dengan penuh harapan, berakhir dengan kehancuran total di pulau asing.
+
+**SETELAH SCRIPT, BUAT 5 SCENE BREAKDOWN DENGAN FORMAT EXACT BERIKUT:**
+
+For EACH scene, use this EXACT formula for image prompts:
+
+**RUMUS PROMPT: "Place the skeleton character" + [AKSI DINAMIS sesuai scene] + [KONTEKS LINGKUNGAN PETUALANGAN sesuai scene] + [DETAIL PROPERTI sesuai scene] + [TIPE CAHAYA EPIK sesuai scene] + [SUDUT KAMERA AKSI sesuai scene] + [EFEK VISUAL SPEKTAKULER sesuai scene] + "Rendered in clean cinematic 3D, highly detailed."**
+
+**CRITICAL RULES FOR VIDEO PROMPTS (BANYAK GERAKAN AGAR TIDAK BOSAN):**
+- Deskripsikan gerakan KAMERA yang dinamis (camera swirl, crash zoom, whip pan, dutch angle, tracking shot)
+- Deskripsikan gerakan KARAKTER (berlari, memanjat, bertarung, jatuh, menghindar, berayun)
+- Deskripsikan EFEK (ledakan, gelombang, debu, percikan air, kilatan pedang, semburan api)
+- Gunakan kata kerja aksi: menerjang, menebas, menembak, melompat, berguling, menyelam
+
+Format output:
+===SCRIPT===
+(script lengkap dengan timeline "Selama X..." seperti contoh di atas, total 6 scene dengan judul + 5 timeline)
+===SCENES===
+Scene 1:
+Time: [waktu dari script]
+Environment: [lokasi epik sesuai scene]
+Image prompt: [Place the skeleton character... Rendered in clean cinematic 3D, highly detailed.]
+Video prompt: [Deskripsi gerakan DINAMIS, banyak aksi, camera movement dramatis]
+
+Scene 2:
+... (lanjutkan sampai scene 5)`;
+
+    const body = {
+        model: GROQ_MODEL,
+        messages: [{ role: "user", content: systemPrompt }],
+        temperature: 0.9,
+        max_tokens: 7000
+    };
+
+    try {
+        const resp = await fetch(GROQ_URL, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!resp.ok) {
+            const errData = await resp.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Error ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const fullContent = data.choices[0]?.message?.content || "";
+        const rawResponse = fullContent;
+
+        let scriptPart = "";
+        let scenesPart = "";
+        
+        if (fullContent.includes("===SCRIPT===") && fullContent.includes("===SCENES===")) {
+            const parts = fullContent.split("===SCENES===");
+            scriptPart = parts[0].replace("===SCRIPT===", "").trim();
+            scenesPart = parts[1] || "";
+        } else {
+            const error = new Error('Format response tidak sesuai');
+            error.rawResponse = rawResponse;
             throw error;
         }
+
+        const sceneRegex = /Scene\s*\d+.*?:\s*Time:\s*(.*?)\s*Environment:\s*(.*?)\s*Image prompt:\s*(.*?)\s*Video prompt:\s*(.*?)(?=\n\s*Scene|\n*$)/gis;
+        const scenes = [];
+        let match;
+        
+        while ((match = sceneRegex.exec(scenesPart)) !== null) {
+            scenes.push({
+                time: match[1].trim(),
+                environment: match[2].trim(),
+                imagePrompt: match[3].trim(),
+                videoPrompt: match[4].trim(),
+                narration: scriptPart
+            });
+        }
+
+        if (scenes.length === 0) {
+            const error = new Error('Tidak ada scene yang ditemukan');
+            error.rawResponse = rawResponse;
+            throw error;
+        }
+
+        return { script: scriptPart, scenes: scenes };
+        
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
     }
+}
 
     async function callGroqForScript(apiKey, ideaTitle, version, petualanganTheme = 'bajaklaut') {
         // Theme-specific settings
