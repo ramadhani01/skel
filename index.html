@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Generator Ide Viral - Groq AI</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #0f0f0f;
+        color: white;
+        padding: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        background: #ff3c00;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 6px;
+    }
+    button:hover {
+        opacity: 0.8;
+    }
+    #output {
+        margin-top: 20px;
+        white-space: pre-wrap;
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 8px;
+    }
+</style>
+</head>
+<body>
+
+<h1>🔥 Generator Ide Video Viral</h1>
+<p>Khusus format: “Apa yang Terjadi Jika...” atau “Berapa Lama Kamu Bisa...”</p>
+
+<button onclick="generateIdeas()">Generate 10 Ide</button>
+
+<div id="output"></div>
+
+<script>
+async function generateIdeas() {
+    const outputDiv = document.getElementById("output");
+    outputDiv.innerText = "Generating ideas...";
+
+    const apiKey = "YOUR_GROQ_API_KEY"; // GANTI DENGAN API KEY KAMU
+
+    const prompt = `
+Anda adalah Penulis Naskah Viral YouTube spesialis simulasi anatomi 3D.
+
+Buat 10 ide video viral dengan format:
+- "Apa yang Terjadi Jika Kamu..."
+- "Berapa Lama Kamu Bisa..."
+
+Tema harus:
+- Ekstrem lingkungan
+- Reaksi kimia
+- Serangan hewan
+- Kegagalan tubuh manusia
+- Eksperimen ekstrem
+
+Hindari topik klise seperti: tidak makan, tidak tidur, tidak minum.
+
+Gunakan gaya penasaran, realistis, dan cocok untuk animasi anatomi 3D.
+`;
+
+    try {
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "llama-3.3-70b-versatile",
+                messages: [
+                    { role: "user", content: prompt }
+                ],
+                temperature: 0.9
+            })
+        });
+
+        const data = await response.json();
+        const ideas = data.choices[0].message.content;
+
+        outputDiv.innerText = ideas;
+
+    } catch (error) {
+        outputDiv.innerText = "Error: " + error.message;
+    }
+}
+</script>
+
+</body>
+</html>
