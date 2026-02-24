@@ -32,7 +32,7 @@ h1{
   margin-bottom:30px;
 }
 
-input, textarea{
+input{
   width:100%;
   padding:10px;
   margin-top:10px;
@@ -51,8 +51,22 @@ button{
 }
 
 .primary{ background:#00e5ff; color:black; }
-.secondary{ background:#ff9800; color:black; }
 .copyBtn{ background:#4caf50; color:black; margin-top:15px; }
+
+.ideaItem{
+  background:#111;
+  padding:12px;
+  margin-top:8px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+  border:1px solid #333;
+}
+
+.ideaItem:hover{
+  background:#222;
+  border-color:#00e5ff;
+}
 
 .sceneBox{
   background:#111;
@@ -64,7 +78,6 @@ button{
 
 pre{
   white-space:pre-wrap;
-  word-wrap:break-word;
 }
 
 .loading{
@@ -85,16 +98,13 @@ pre{
 </div>
 
 <div class="card">
-<h3>Generate Ide (Judul Only)</h3>
-<input type="number" id="ideaCount" value="5">
+<h3>Generate 10 Ide (Click to Produce)</h3>
 <button class="primary" onclick="generateIdeas()">Generate Ide</button>
-<pre id="ideaOutput"></pre>
+<div id="ideaOutput"></div>
 </div>
 
 <div class="card">
-<h3>Full Production</h3>
-<textarea id="selectedIdea" placeholder="Paste judul di sini"></textarea>
-<button class="secondary" onclick="produceFull()">Generate Full</button>
+<h3>Scenes</h3>
 <div id="sceneContainer"></div>
 </div>
 
@@ -117,6 +127,7 @@ window.onload=()=>{
 async function callAI(prompt){
   const key=localStorage.getItem("apiKey");
   if(!key){alert("Masukkan API Key dulu");return;}
+
   const res=await fetch(API_URL,{
     method:"POST",
     headers:{
@@ -129,6 +140,7 @@ async function callAI(prompt){
       temperature:0.7
     })
   });
+
   const data=await res.json();
   return data.choices[0].message.content;
 }
@@ -138,15 +150,14 @@ function cleanIdeas(text){
     .split("\n")
     .map(l=>l.split(" - ")[0])
     .map(l=>l.replace(/^\d+\.\s*/,""))
-    .filter(l=>l.trim()!=="")
-    .join("\n");
+    .filter(l=>l.trim()!=="");
 }
 
 async function generateIdeas(){
-  const count=document.getElementById("ideaCount").value;
+  document.getElementById("ideaOutput").innerHTML="<div class='loading'>Generating ideas...</div>";
 
   const prompt=`
-Buat ${count} ide YouTube Shorts tentang batas tubuh manusia.
+Buat 10 ide YouTube Shorts tentang batas tubuh manusia.
 
 ATURAN:
 - Hanya judul.
@@ -155,13 +166,26 @@ ATURAN:
 - Tanpa numbering.
 `;
 
-  document.getElementById("ideaOutput").innerText="Generating...";
   const raw=await callAI(prompt);
-  document.getElementById("ideaOutput").innerText=cleanIdeas(raw);
+  const ideas=cleanIdeas(raw);
+
+  renderIdeas(ideas);
 }
 
-async function produceFull(){
-  const idea=document.getElementById("selectedIdea").value;
+function renderIdeas(ideas){
+  const container=document.getElementById("ideaOutput");
+  container.innerHTML="";
+
+  ideas.forEach(idea=>{
+    const div=document.createElement("div");
+    div.className="ideaItem";
+    div.innerText=idea;
+    div.onclick=()=>produceFull(idea);
+    container.appendChild(div);
+  });
+}
+
+async function produceFull(idea){
   document.getElementById("sceneContainer").innerHTML="<div class='loading'>Generating scenes...</div>";
 
   const prompt=`
@@ -199,7 +223,7 @@ function renderScenes(text){
 
   const scenes=text.split("[SCENE").filter(s=>s.trim()!="");
 
-  scenes.forEach((scene,index)=>{
+  scenes.forEach(scene=>{
     const fullText="[SCENE"+scene.trim();
 
     const div=document.createElement("div");
