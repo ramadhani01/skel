@@ -6,7 +6,6 @@
 <title>AI Shorts Studio PRO</title>
 
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body{
@@ -17,7 +16,6 @@ body{
     overflow-x:hidden;
 }
 
-/* Animated glow background */
 body::before{
     content:"";
     position:fixed;
@@ -165,13 +163,11 @@ button:hover{
     from{opacity:0;transform:translateY(15px);}
     to{opacity:1;transform:translateY(0);}
 }
-
 </style>
 </head>
 <body>
 
 <div class="container">
-
 <h1>🔥 AI Shorts Studio PRO</h1>
 
 <div class="card">
@@ -192,7 +188,6 @@ button:hover{
 <div id="productionContainer"></div>
 <button onclick="exportJSON()">Export Production JSON</button>
 </div>
-
 </div>
 
 <script>
@@ -275,18 +270,43 @@ Anda adalah sistem produksi YouTube Shorts profesional.
 
 Topik: ${idea}
 
-Pisahkan output dengan label berikut:
+FORMAT WAJIB:
 
 [JUDUL]
+Tulis hanya SATU kalimat ide saja.
+Tanpa deskripsi tambahan.
+Tanpa penjelasan setelah tanda strip.
+Hanya kalimat utama.
+
 [SCRIPT]
+Buat script narasi progresif 45–60 detik.
+Gunakan struktur waktu fleksibel seperti:
+Selama beberapa menit...
+Selama 1 jam...
+Selama 12 jam...
+Selama 1 hari...
+Selama 3 hari...
+Selama 1 minggu...
+Selama 1 bulan...
+Selama 1 tahun...
+(Pilih waktu yang paling realistis sesuai skenario.)
+
+Setiap bagian harus menunjukkan eskalasi yang semakin serius.
+Gaya realistis, edukatif, progresif.
+
 [SCENE]
+Buat 5 scene mengikuti perkembangan waktu.
+
 [IMAGE PROMPT]
+Setiap scene wajib ada prompt gambar 8K UHD cinematic.
+Karakter selalu:
+"Place the skeleton character."
+
 [VIDEO PROMPT]
+Setiap scene wajib ada prompt video cinematic image-to-video.
+
 [THUMBNAIL]
 [SEO]
-
-Karakter visual harus selalu:
-"Kerangka manusia berwarna putih yang tembus cahaya."
 `;
 
 const result=await callGroq(masterPrompt);
@@ -295,13 +315,22 @@ renderSections(result);
 
 function cleanTitle(title){
 
-title = title.split("\n")[0];
-title = title.split(" - ")[0];
-title = title.split(": ")[0];
+title = title.split("\n")[0].trim();
+title = title.replace(/^\d+[\.\)]\s*/, "");
+title = title.replace(/^-+\s*/, "");
+
+if(title.includes(" - ")){
+    title = title.split(" - ")[0];
+}
+
+if(title.includes(":")){
+    title = title.split(":")[0];
+}
+
 title = title.trim();
 
 if(!title.endsWith("?")){
-    title = title + "?";
+    title += "?";
 }
 
 return title;
@@ -372,6 +401,5 @@ function exportJSON(){
 }
 
 </script>
-
 </body>
 </html>
