@@ -38,7 +38,6 @@ input{
   margin-top:10px;
   border-radius:8px;
   border:none;
-  font-size:14px;
 }
 
 button{
@@ -65,7 +64,14 @@ button{
 
 .ideaItem:hover{
   background:#222;
+}
+
+.ideaItem.active{
+  background:linear-gradient(135deg,#00e5ff,#00bcd4);
+  color:#000;
+  font-weight:bold;
   border-color:#00e5ff;
+  box-shadow:0 0 20px rgba(0,229,255,0.6);
 }
 
 .sceneBox{
@@ -76,12 +82,25 @@ button{
   border:1px solid #333;
 }
 
+.thumbnailBox{
+  background:#0f172a;
+  padding:15px;
+  border-radius:12px;
+  margin-top:15px;
+  border:1px solid #00e5ff;
+}
+
 pre{
   white-space:pre-wrap;
 }
 
 .loading{
   color:#00e5ff;
+}
+
+.error{
+  color:#ff5252;
+  font-weight:bold;
 }
 </style>
 </head>
@@ -101,6 +120,11 @@ pre{
 <h3>Generate 10 Ide (Click to Produce)</h3>
 <button class="primary" onclick="generateIdeas()">Generate Ide</button>
 <div id="ideaOutput"></div>
+</div>
+
+<div class="card">
+<h3>Thumbnail Prompt</h3>
+<div id="thumbnailContainer"></div>
 </div>
 
 <div class="card">
@@ -126,7 +150,7 @@ window.onload=()=>{
 
 async function callAI(prompt){
   const key=localStorage.getItem("apiKey");
-  if(!key){alert("Masukkan API Key dulu");return;}
+  if(!key) throw new Error("API Key belum dimasukkan.");
 
   const res=await fetch(API_URL,{
     method:"POST",
@@ -141,7 +165,13 @@ async function callAI(prompt){
     })
   });
 
+  if(!res.ok){
+    const text=await res.text();
+    throw new Error("API Error: "+text);
+  }
+
   const data=await res.json();
+  if(!data.choices) throw new Error("Response tidak valid.");
   return data.choices[0].message.content;
 }
 
@@ -154,9 +184,11 @@ function cleanIdeas(text){
 }
 
 async function generateIdeas(){
-  document.getElementById("ideaOutput").innerHTML="<div class='loading'>Generating ideas...</div>";
+  const container=document.getElementById("ideaOutput");
+  container.innerHTML="<div class='loading'>Generating ideas...</div>";
 
-  const prompt=`
+  try{
+    const prompt=`
 Buat 10 ide YouTube Shorts tentang batas tubuh manusia.
 
 ATURAN:
@@ -166,10 +198,13 @@ ATURAN:
 - Tanpa numbering.
 `;
 
-  const raw=await callAI(prompt);
-  const ideas=cleanIdeas(raw);
+    const raw=await callAI(prompt);
+    const ideas=cleanIdeas(raw);
+    renderIdeas(ideas);
 
-  renderIdeas(ideas);
+  }catch(err){
+    container.innerHTML="<div class='error'>"+err.message+"</div>";
+  }
 }
 
 function renderIdeas(ideas){
@@ -180,41 +215,83 @@ function renderIdeas(ideas){
     const div=document.createElement("div");
     div.className="ideaItem";
     div.innerText=idea;
-    div.onclick=()=>produceFull(idea);
+
+    div.onclick=()=>{
+      document.querySelectorAll(".ideaItem")
+        .forEach(i=>i.classList.remove("active"));
+
+      div.classList.add("active");
+      produceFull(idea);
+      generateThumbnail(idea);
+    };
+
     container.appendChild(div);
   });
 }
 
-async function produceFull(idea){
-  document.getElementById("sceneContainer").innerHTML="<div class='loading'>Generating scenes...</div>";
+async function generateThumbnail(idea){
+  const box=document.getElementById("thumbnailContainer");
+  box.innerHTML="<div class='loading'>Generating thumbnail...</div>";
 
-  const prompt=`
+  try{
+    const prompt=`
+Buat thumbnail prompt YouTube Shorts ultra clickbait cinematic 8K.
+Topik: ${idea}
+
+Gunakan karakter:
+Place the skeleton character
+
+Tambahkan teks besar dramatis.
+`;
+
+    const result=await callAI(prompt);
+
+    box.innerHTML=`
+      <div class="thumbnailBox">
+        <pre>${result}</pre>
+        <button class="copyBtn" onclick="navigator.clipboard.writeText(\`${result.replace(/`/g,"")}\`)">
+        Copy Thumbnail
+        </button>
+      </div>
+    `;
+  }catch(err){
+    box.innerHTML="<div class='error'>"+err.message+"</div>";
+  }
+}
+
+async function produceFull(idea){
+  const container=document.getElementById("sceneContainer");
+  container.innerHTML="<div class='loading'>Generating scenes...</div>";
+
+  try{
+    const prompt=`
 Anda adalah sistem produksi YouTube Shorts profesional.
 
 Topik: ${idea}
 
-Buat 5 SCENE dengan struktur persis seperti ini:
+Buat 5 SCENE dengan format:
 
 [SCENE 1 – Selama ...]
 SCRIPT:
 Narasi progresif sesuai waktu.
 
 IMAGE PROMPT:
-Harus selalu diawali dengan:
+Selalu diawali dengan:
 Place the skeleton character
-Lalu lanjutkan deskripsi sinematik 8K UHD.
 
 VIDEO PROMPT:
-Prompt image-to-video cinematic.
+Prompt cinematic image-to-video.
 
-Gunakan waktu fleksibel:
-menit / jam / hari / minggu / bulan / tahun.
-
-Setiap scene harus menunjukkan eskalasi kondisi.
+Gunakan waktu fleksibel.
+Setiap scene eskalatif.
 `;
 
-  const result=await callAI(prompt);
-  renderScenes(result);
+    const result=await callAI(prompt);
+    renderScenes(result);
+
+  }catch(err){
+    container.innerHTML="<div class='error'>"+err.message+"</div>";
+  }
 }
 
 function renderScenes(text){
