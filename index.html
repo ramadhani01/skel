@@ -8,8 +8,8 @@
 <style>
 body{
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg,#0f0f0f,#1a1a1a);
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
     color:white;
 }
 .container{
@@ -93,13 +93,13 @@ button:hover{
 .success{
     color:#00ff99;
 }
-@keyframes fadeIn{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
-}
 .loading{
     color:#888;
     font-style:italic;
+}
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
@@ -180,10 +180,8 @@ async function generateIdeas(){
     const prompt=`
 Buat 10 ide viral YouTube Shorts.
 Format:
-- Bagaimana jika...
 - Apa yang Terjadi Jika Kamu...
 - Berapa Lama Kamu Bisa...
-
 Tema ekstrem, realistis, cocok animasi anatomi 3D.
 Hindari topik klise.
 `;
@@ -229,6 +227,20 @@ const result=await callGroq(masterPrompt);
 renderSections(result);
 }
 
+function cleanTitle(title){
+
+title = title.split("\n")[0];
+title = title.split(" - ")[0];
+title = title.split(": ")[0];
+title = title.trim();
+
+if(!title.endsWith("?")){
+    title = title + "?";
+}
+
+return title;
+}
+
 function renderSections(text){
 
 const container=document.getElementById("productionContainer");
@@ -250,10 +262,9 @@ sections.forEach(sec=>{
         const end=findNext(text,start,sections);
         let content=text.substring(start+sec.label.length,end).trim();
 
-if(sec.label === "[JUDUL]"){
-    content = content.split("\n")[0];
-    content = content.split(" - ")[0];
-}
+        if(sec.label==="[JUDUL]"){
+            content=cleanTitle(content);
+        }
 
         const box=document.createElement("div");
         box.className="section-box";
