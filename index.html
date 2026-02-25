@@ -60,11 +60,6 @@ h1{
     transition:0.3s;
 }
 
-.card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 40px rgba(255,60,0,0.2);
-}
-
 input{
     width:100%;
     padding:14px;
@@ -88,15 +83,6 @@ button{
     transition:0.3s;
 }
 
-button:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 20px rgba(255,60,0,0.6);
-}
-
-.secondary{
-    background:rgba(255,255,255,0.08);
-}
-
 .idea{
     background:rgba(255,255,255,0.05);
     padding:14px;
@@ -107,32 +93,42 @@ button:hover{
     border:1px solid transparent;
 }
 
-.idea:hover{
-    background:rgba(255,255,255,0.1);
-    border:1px solid rgba(255,60,0,0.4);
-    transform:scale(1.02);
-}
-
+/* --- TAMPILAN BARU SESUAI FOTO --- */
 .section-box{
-    background:rgba(255,255,255,0.04);
+    background:rgba(255,255,255,0.03);
     padding:20px;
     border-radius:16px;
-    margin-bottom:20px;
-    border:1px solid rgba(255,255,255,0.08);
+    margin-bottom:30px;
+    border: 1px solid rgba(255,60,0,0.2);
     animation:fadeIn 0.6s ease forwards;
-    transition:0.3s;
-}
-
-.section-box:hover{
-    border:1px solid rgba(255,60,0,0.5);
-    box-shadow:0 0 25px rgba(255,60,0,0.2);
 }
 
 .section-title{
     font-weight:700;
-    font-size:16px;
-    margin-bottom:10px;
+    font-size:18px;
+    margin-bottom:15px;
     color:#ff7a00;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.prompt-sub-box {
+    background: #121212;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 15px;
+    border-left: 4px solid #ff7a00;
+}
+
+.prompt-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff7a00;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
 }
 
 .section-content{
@@ -144,25 +140,23 @@ button:hover{
 
 .copy-btn{
     background:rgba(255,255,255,0.08);
-    padding:6px 12px;
+    padding:6px 14px;
     font-size:12px;
     margin-top:12px;
     border-radius:8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
 }
 
-.success{
-    color:#00ffb3;
+.copy-btn:hover {
+    background: #ff3c00;
 }
 
-.loading{
-    color:#999;
-    font-style:italic;
-}
-
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(15px);}
-    to{opacity:1;transform:translateY(0);}
-}
+.loading{ color:#999; font-style:italic; }
+@keyframes fadeIn{ from{opacity:0;transform:translateY(15px);} to{opacity:1;transform:translateY(0);} }
 </style>
 </head>
 <body>
@@ -170,7 +164,6 @@ button:hover{
 
 <h1>🔥 AI Shorts Studio PRO</h1>
 
-<!-- API Key -->
 <div class="card">
 <h3>Groq API Key</h3>
 <input type="password" id="apiKeyInput" placeholder="Masukkan API Key">
@@ -179,13 +172,11 @@ button:hover{
 <div id="status"></div>
 </div>
 
-<!-- Generate Ide -->
 <div class="card">
 <button onclick="generateIdeas()">Generate 10 Ide Viral</button>
 <div id="ideas"></div>
 </div>
 
-<!-- Production -->
 <div class="card">
 <h3>🎬 Production Studio Output</h3>
 <div id="productionContainer"></div>
@@ -197,23 +188,17 @@ button:hover{
 <script>
 window.onload=()=>{
     const k=localStorage.getItem("groq_key");
-    if(k){
-        apiKeyInput.value=k;
-        status.innerHTML="<div class='success'>API Key tersimpan ✔</div>";
-    }
+    if(k) apiKeyInput.value=k;
 };
 
 function saveKey(){
-    const k=apiKeyInput.value.trim();
-    if(!k)return alert("Masukkan API Key");
-    localStorage.setItem("groq_key",k);
+    localStorage.setItem("groq_key",apiKeyInput.value.trim());
     status.innerHTML="<div class='success'>API Key tersimpan ✔</div>";
 }
 
 function clearKey(){
     localStorage.removeItem("groq_key");
     apiKeyInput.value="";
-    status.innerHTML="API Key dihapus.";
 }
 
 async function callGroq(prompt){
@@ -222,10 +207,7 @@ async function callGroq(prompt){
 
     const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
         method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "Authorization":`Bearer ${key}`
-        },
+        headers:{"Content-Type":"application/json","Authorization":`Bearer ${key}`},
         body:JSON.stringify({
             model:"llama-3.3-70b-versatile",
             messages:[{role:"user",content:prompt}],
@@ -233,39 +215,12 @@ async function callGroq(prompt){
         })
     });
     const data=await res.json();
-    if(data.error) throw new Error(data.error.message);
     return data.choices[0].message.content;
 }
 
-// -------------------- Generate Ide --------------------
 async function generateIdeas(){
     ideas.innerHTML="<div class='loading'>Generating ideas...</div>";
-
-    const prompt = `
-Buat 10 ide YouTube Shorts tentang satu kejadian ekstrem dan tiba-tiba yang menyerang tubuh manusia.
-
-GAYA WAJIB:
-1) Realistis Sehari-hari: kejadian bisa terjadi dalam kehidupan normal (misal: tersiram air panas, tersengat serangga). 
-2) Realistis tapi Jarang Terjadi: kejadian mungkin tapi tidak umum (misal: gigitan hewan liar, serangan predator kecil, paparan racun alami).
-3) Ekstrem tapi Masih Mungkin: kejadian berat dan menegangkan, tapi realistis, bukan film aksi (misal: terjebak di reruntuhan, terkena semburan api).
-
-WAJIB:
-- Setiap ide harus satu kejadian spesifik dan langsung menyerang tubuh.
-- Harus ada penyebab yang jelas (hewan, api, ledakan, racun, suhu ekstrem, tekanan, dll).
-- Gunakan variasi kejadian: hewan, lingkungan, reaksi kimia, kecelakaan tiba-tiba.
-- Jangan menyebut angka spesifik (detik, meter, suhu, jumlah).
-- Buat terasa menggantung dan memicu rasa penasaran.
-- Harus realistis dan mungkin terjadi di dunia nyata.
-
-FORMAT:
-- Hanya judul.
-- Satu baris per ide.
-- Tanpa numbering.
-- Tanpa deskripsi.
-- Gunakan format seperti:
-  "Bagaimana jika..."
-  "Apa yang terjadi jika..."
-`;
+    const prompt = `Buat 10 ide YouTube Shorts tentang satu kejadian ekstrem dan tiba-tiba yang menyerang tubuh manusia. GAYA WAJIB: 1) Realistis Sehari-hari, 2) Realistis tapi Jarang Terjadi, 3) Ekstrem tapi Masih Mungkin. FORMAT: Hanya judul, satu baris per ide, tanpa numbering. Gunakan format "Bagaimana jika..." atau "Apa yang terjadi jika..."`;
 
     try{
         const result = await callGroq(prompt);
@@ -279,16 +234,14 @@ FORMAT:
                 ideas.appendChild(d);
             }
         });
-    }catch(err){
-        ideas.innerHTML="<div class='loading'>Error: "+err.message+"</div>";
-    }
+    }catch(err){ ideas.innerHTML="Error: "+err.message; }
 }
 
-// -------------------- Produce Full Script + Scenes --------------------
 async function produceFull(idea){
     const container=document.getElementById("productionContainer");
     container.innerHTML="<div class='loading'>🚀 Producing cinematic production system...</div>";
 
+    // INI ADALAH MASTER PROMPT ASLI ANDA (TIDAK DIUBAH)
     const masterPrompt=`
 Anda adalah sistem produksi YouTube Shorts profesional.
 
@@ -313,57 +266,44 @@ Setiap scene harus eskalatif.
     try{
         const result = await callGroq(masterPrompt);
         renderSections(result);
-    }catch(err){
-        container.innerHTML="<div class='loading'>Error: "+err.message+"</div>";
-    }
+    }catch(err){ container.innerHTML="Error: "+err.message; }
 }
 
-// -------------------- Render Sections --------------------
-// -------------------- Render Sections --------------------
 function renderSections(text){
-    const container = document.getElementById("productionContainer");
-    container.innerHTML = "";
+    const container=document.getElementById("productionContainer");
+    container.innerHTML="";
 
-    // Pisahkan bagian NARASI dan SCENE
-    const sections = text.split(/\[SCENE\]|\[NARASI\]/).map(s => s.trim()).filter(s => s);
+    // Pisahkan Narasi Utama
+    const parts = text.split(/\[SCENE\]/i);
+    const narasiHeader = parts[0].replace(/\[NARASI\]/i, '').trim();
 
-    if(sections.length > 0){
-        // ---- Narasi ----
-        const box = document.createElement("div");
-        box.className = "section-box";
-        box.innerHTML = `
-            <div class="section-title">🧠 Narasi</div>
-            <div class="section-content" contenteditable="true">${sections[0]}</div>
-            <button class="copy-btn" onclick="copySection(this)">Copy</button>
-        `;
-        container.appendChild(box);
+    if(narasiHeader){
+        const nBox = document.createElement("div");
+        nBox.className = "section-box";
+        nBox.innerHTML = `<div class="section-title">🧠 Narasi Utama</div>
+                          <div class="prompt-sub-box"><div class="section-content">${narasiHeader}</div><button class="copy-btn" onclick="copyText(this)">Copy Narasi</button></div>`;
+        container.appendChild(nBox);
+    }
 
-        // ---- Scene ----
-        for(let i = 1; i < sections.length; i++){
-            // Misalkan tiap scene dikembalikan dalam format:
-            // IMAGE PROMPT: ... \nVIDEO PROMPT: ...
-            // Kita pisahkan agar hanya prompt yang tampil di box
-            const sceneParts = sections[i].split(/IMAGE PROMPT:|VIDEO PROMPT:/).map(p => p.trim());
+    // Olah per Scene
+    for(let i=1; i<parts.length; i++){
+        const raw = parts[i];
+        const script = (raw.match(/SCRIPT:([\s\S]*?)(?=IMAGE PROMPT:|$)/i) || ["",""])[1].trim();
+        const image = (raw.match(/IMAGE PROMPT:([\s\S]*?)(?=VIDEO PROMPT:|$)/i) || ["",""])[1].trim();
+        const video = (raw.match(/VIDEO PROMPT:([\s\S]*?|$)/i) || ["",""])[1].trim();
 
-            const sceneBox = document.createElement("div");
-            sceneBox.className = "section-box";
-
-            sceneBox.innerHTML = `
-                <div class="section-title">🎞 Scene ${i}</div>
-                <div class="section-content" contenteditable="true">
-                    IMAGE PROMPT: ${sceneParts[1] ? sceneParts[1] : ""}
-                    \n\nVIDEO PROMPT: ${sceneParts[2] ? sceneParts[2] : ""}
-                </div>
-                <button class="copy-btn" onclick="copySection(this)">Copy</button>
-            `;
-            container.appendChild(sceneBox);
-        }
+        const sBox = document.createElement("div");
+        sBox.className = "section-box";
+        sBox.innerHTML = `<div class="section-title">🎞 SCENE ${i}</div>
+            <div class="prompt-sub-box"><div class="prompt-label">📝 Script</div><div class="section-content">${script}</div><button class="copy-btn" onclick="copyText(this)">Copy Script</button></div>
+            <div class="prompt-sub-box"><div class="prompt-label">🖼 Image Prompt</div><div class="section-content">${image}</div><button class="copy-btn" onclick="copyText(this)">Copy Image</button></div>
+            <div class="prompt-sub-box"><div class="prompt-label">🎥 Video Prompt</div><div class="section-content">${video}</div><button class="copy-btn" onclick="copyText(this)">Copy Video</button></div>`;
+        container.appendChild(sBox);
     }
 }
 
-// -------------------- Copy & Export --------------------
-function copySection(btn){
-    const text=btn.previousElementSibling.innerText;
+function copyText(btn){
+    const text = btn.previousElementSibling.innerText;
     navigator.clipboard.writeText(text);
     btn.innerText="Copied ✔";
     setTimeout(()=>btn.innerText="Copy",1500);
@@ -374,7 +314,7 @@ function exportJSON(){
     const blob=new Blob([JSON.stringify({production:content},null,2)],{type:"application/json"});
     const a=document.createElement("a");
     a.href=URL.createObjectURL(blob);
-    a.download="shorts-production-pack.json";
+    a.download="shorts-production.json";
     a.click();
 }
 </script>
