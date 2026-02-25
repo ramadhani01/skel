@@ -1,353 +1,372 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Shorts Dashboard PRO</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Shorts Studio PRO</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f0f0f,#1c1c1c,#111827);
-  color:white;
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background: radial-gradient(circle at 20% 20%, #1a1a2e, #0f0f0f 60%);
+    color:white;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    top:-200px;
+    left:-200px;
+    width:600px;
+    height:600px;
+    background:radial-gradient(circle,#ff3c00,transparent 70%);
+    opacity:0.15;
+    filter:blur(100px);
+    animation:floatGlow 8s ease-in-out infinite alternate;
+    z-index:-1;
+}
+
+@keyframes floatGlow{
+    from{transform:translate(0,0);}
+    to{transform:translate(100px,80px);}
 }
 
 .container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-
-.card{
-  background:#1a1a1a;
-  padding:20px;
-  border-radius:15px;
-  margin-bottom:20px;
-  box-shadow:0 0 25px rgba(0,0,0,0.6);
+    max-width:1200px;
+    margin:auto;
+    padding:40px 25px;
 }
 
 h1{
-  text-align:center;
-  margin-bottom:30px;
+    font-size:32px;
+    background:linear-gradient(90deg,#ff3c00,#ff9900);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:700;
+}
+
+.card{
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:30px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 40px rgba(255,60,0,0.2);
 }
 
 input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:none;
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    background:rgba(255,255,255,0.07);
+    color:white;
+    font-size:14px;
+    outline:none;
 }
 
 button{
-  margin-top:10px;
-  padding:10px 15px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    margin-top:12px;
+    background:linear-gradient(90deg,#ff3c00,#ff7a00);
+    color:white;
+    transition:0.3s;
 }
 
-.primary{ background:#00e5ff; color:black; }
-.copyBtn{ background:#4caf50; color:black; margin-top:15px; }
-
-.ideaItem{
-  background:#111;
-  padding:12px;
-  margin-top:8px;
-  border-radius:8px;
-  cursor:pointer;
-  transition:0.2s;
-  border:1px solid #333;
+button:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 20px rgba(255,60,0,0.6);
 }
 
-.ideaItem:hover{
-  background:#222;
+.secondary{
+    background:rgba(255,255,255,0.08);
 }
 
-.ideaItem.active{
-  background:linear-gradient(135deg,#00e5ff,#00bcd4);
-  color:#000;
-  font-weight:bold;
-  border-color:#00e5ff;
-  box-shadow:0 0 20px rgba(0,229,255,0.6);
+.idea{
+    background:rgba(255,255,255,0.05);
+    padding:14px;
+    border-radius:14px;
+    margin-top:12px;
+    cursor:pointer;
+    transition:0.3s;
+    border:1px solid transparent;
 }
 
-.sceneBox{
-  background:#111;
-  padding:15px;
-  border-radius:12px;
-  margin-top:15px;
-  border:1px solid #333;
+.idea:hover{
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,60,0,0.4);
+    transform:scale(1.02);
 }
 
-.thumbnailBox{
-  background:#0f172a;
-  padding:15px;
-  border-radius:12px;
-  margin-top:15px;
-  border:1px solid #00e5ff;
+.section-box{
+    background:rgba(255,255,255,0.04);
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.08);
+    animation:fadeIn 0.6s ease forwards;
+    transition:0.3s;
 }
 
-pre{
-  white-space:pre-wrap;
+.section-box:hover{
+    border:1px solid rgba(255,60,0,0.5);
+    box-shadow:0 0 25px rgba(255,60,0,0.2);
+}
+
+.section-title{
+    font-weight:700;
+    font-size:16px;
+    margin-bottom:10px;
+    color:#ff7a00;
+}
+
+.section-content{
+    white-space:pre-wrap;
+    line-height:1.7;
+    color:#e0e0e0;
+    font-size:14px;
+}
+
+.copy-btn{
+    background:rgba(255,255,255,0.08);
+    padding:6px 12px;
+    font-size:12px;
+    margin-top:12px;
+    border-radius:8px;
+}
+
+.success{
+    color:#00ffb3;
 }
 
 .loading{
-  color:#00e5ff;
+    color:#999;
+    font-style:italic;
 }
 
-.error{
-  color:#ff5252;
-  font-weight:bold;
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(15px);}
+    to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
 <body>
-
 <div class="container">
 
-<h1>🚀 AI Shorts Dashboard PRO</h1>
+<h1>🔥 AI Shorts Studio PRO</h1>
 
+<!-- API Key -->
 <div class="card">
-<h3>API Key</h3>
-<input type="password" id="apiKey" placeholder="Masukkan API Key">
-<button class="primary" onclick="saveKey()">Simpan API Key</button>
+<h3>Groq API Key</h3>
+<input type="password" id="apiKeyInput" placeholder="Masukkan API Key">
+<button onclick="saveKey()">Simpan</button>
+<button class="secondary" onclick="clearKey()">Hapus</button>
+<div id="status"></div>
 </div>
 
+<!-- Generate Ide -->
 <div class="card">
-<h3>Generate 10 Ide (Click to Produce)</h3>
-<button class="primary" onclick="generateIdeas()">Generate Ide</button>
-<div id="ideaOutput"></div>
+<button onclick="generateIdeas()">Generate 10 Ide Viral</button>
+<div id="ideas"></div>
 </div>
 
+<!-- Production -->
 <div class="card">
-<h3>Thumbnail Prompt</h3>
-<div id="thumbnailContainer"></div>
-</div>
-
-<div class="card">
-<h3>Scenes</h3>
-<div id="sceneContainer"></div>
+<h3>🎬 Production Studio Output</h3>
+<div id="productionContainer"></div>
+<button onclick="exportJSON()">Export Production JSON</button>
 </div>
 
 </div>
 
 <script>
-const API_URL="https://api.groq.com/openai/v1/chat/completions";
-const MODEL="llama-3.1-8b-instant";
-
-function saveKey(){
-  localStorage.setItem("apiKey",document.getElementById("apiKey").value);
-  alert("API Key Tersimpan");
-}
-
 window.onload=()=>{
-  const saved=localStorage.getItem("apiKey");
-  if(saved) document.getElementById("apiKey").value=saved;
+    const k=localStorage.getItem("groq_key");
+    if(k){
+        apiKeyInput.value=k;
+        status.innerHTML="<div class='success'>API Key tersimpan ✔</div>";
+    }
 };
 
-async function callAI(prompt){
-  const key=localStorage.getItem("apiKey");
-  if(!key) throw new Error("API Key belum dimasukkan.");
-
-  const res=await fetch(API_URL,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":"Bearer "+key
-    },
-    body:JSON.stringify({
-      model:MODEL,
-      messages:[{role:"user",content:prompt}],
-      temperature:0.7
-    })
-  });
-
-  if(!res.ok){
-    const text=await res.text();
-    throw new Error("API Error: "+text);
-  }
-
-  const data=await res.json();
-  if(!data.choices) throw new Error("Response tidak valid.");
-  return data.choices[0].message.content;
+function saveKey(){
+    const k=apiKeyInput.value.trim();
+    if(!k)return alert("Masukkan API Key");
+    localStorage.setItem("groq_key",k);
+    status.innerHTML="<div class='success'>API Key tersimpan ✔</div>";
 }
 
-function cleanIdeas(text){
-  return text
-    .split("\n")
-    .map(l=>l.split(" - ")[0])
-    .map(l=>l.replace(/^\d+\.\s*/,""))
-    .filter(l=>l.trim()!=="");
+function clearKey(){
+    localStorage.removeItem("groq_key");
+    apiKeyInput.value="";
+    status.innerHTML="API Key dihapus.";
 }
 
+async function callGroq(prompt){
+    const key=localStorage.getItem("groq_key");
+    if(!key)return alert("Simpan API Key dulu");
+
+    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":`Bearer ${key}`
+        },
+        body:JSON.stringify({
+            model:"llama-3.3-70b-versatile",
+            messages:[{role:"user",content:prompt}],
+            temperature:0.9
+        })
+    });
+    const data=await res.json();
+    if(data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
+}
+
+// -------------------- Generate Ide --------------------
 async function generateIdeas(){
-  const container=document.getElementById("ideaOutput");
-  container.innerHTML="<div class='loading'>Generating ideas...</div>";
+    ideas.innerHTML="<div class='loading'>Generating ideas...</div>";
 
-  try{
     const prompt = `
-Buat 10 judul video tentang satu kejadian ekstrem yang tiba-tiba terjadi pada tubuh manusia.
+Buat 10 ide YouTube Shorts tentang satu kejadian ekstrem dan tiba-tiba yang menyerang tubuh manusia.
 
-Gunakan campuran dari 3 gaya berikut:
-
-1) Realistis Sehari-hari
-   Kejadian yang bisa terjadi pada orang biasa dalam kehidupan normal
-   (contoh: kebakaran rumah, gigitan anjing, tersiram air panas)
-
-2) Realistis tapi Jarang Terjadi
-   Kejadian yang mungkin terjadi tapi tidak umum
-   (contoh: serangan hewan liar, paparan zat beracun, ledakan kecil)
-
-3) Ekstrem tapi Masih Mungkin
-   Kejadian berat dan menegangkan, tapi tetap realistis dan tidak seperti film aksi
-   (contoh: terlalu dekat dengan ledakan, terjebak di ruang penuh asap, terkena semburan api)
+GAYA WAJIB:
+1) Realistis Sehari-hari: kejadian bisa terjadi dalam kehidupan normal (misal: tersiram air panas, tersengat serangga). 
+2) Realistis tapi Jarang Terjadi: kejadian mungkin tapi tidak umum (misal: gigitan hewan liar, serangan predator kecil, paparan racun alami).
+3) Ekstrem tapi Masih Mungkin: kejadian berat dan menegangkan, tapi realistis, bukan film aksi (misal: terjebak di reruntuhan, terkena semburan api).
 
 WAJIB:
-- Setiap judul harus berupa satu kejadian spesifik dan langsung menyerang tubuh.
+- Setiap ide harus satu kejadian spesifik dan langsung menyerang tubuh.
 - Harus ada penyebab yang jelas (hewan, api, ledakan, racun, suhu ekstrem, tekanan, dll).
-- Jangan menyebut angka spesifik seperti jarak, detik, suhu, atau jumlah.
+- Gunakan variasi kejadian: hewan, lingkungan, reaksi kimia, kecelakaan tiba-tiba.
+- Jangan menyebut angka spesifik (detik, meter, suhu, jumlah).
 - Buat terasa menggantung dan memicu rasa penasaran.
 - Harus realistis dan mungkin terjadi di dunia nyata.
-- Jangan membahas konsep umum, teori, olahraga, atau topik pelajaran sekolah.
-- Jangan terlalu akademis atau formal.
 
-FORMAT WAJIB:
+FORMAT:
 - Hanya judul.
-- Satu baris satu ide.
+- Satu baris per ide.
 - Tanpa numbering.
 - Tanpa deskripsi.
-- Gunakan pola seperti:
-
-"Bagaimana jika..."
-"Apa yang terjadi jika..."
-
-Jika judul terdengar seperti adegan film aksi yang mustahil atau terlalu berlebihan, jangan gunakan.
-`;
-    const raw=await callAI(prompt);
-    const ideas=cleanIdeas(raw);
-    renderIdeas(ideas);
-
-  }catch(err){
-    container.innerHTML="<div class='error'>"+err.message+"</div>";
-  }
-}
-
-function renderIdeas(ideas){
-  const container=document.getElementById("ideaOutput");
-  container.innerHTML="";
-
-  ideas.forEach(idea=>{
-    const div=document.createElement("div");
-    div.className="ideaItem";
-    div.innerText=idea;
-
-    div.onclick=()=>{
-      document.querySelectorAll(".ideaItem")
-        .forEach(i=>i.classList.remove("active"));
-
-      div.classList.add("active");
-      produceFull(idea);
-      generateThumbnail(idea);
-    };
-
-    container.appendChild(div);
-  });
-}
-
-async function generateThumbnail(idea){
-  const box=document.getElementById("thumbnailContainer");
-  box.innerHTML="<div class='loading'>Generating thumbnail...</div>";
-
-  try{
-    const prompt=`
-Buat thumbnail prompt YouTube Shorts ultra clickbait cinematic 8K.
-Topik: ${idea}
-
-Gunakan karakter:
-Place the skeleton character
-
-Tambahkan teks besar dramatis.
+- Gunakan format seperti:
+  "Bagaimana jika..."
+  "Apa yang terjadi jika..."
 `;
 
-    const result=await callAI(prompt);
-
-    box.innerHTML=`
-      <div class="thumbnailBox">
-        <pre>${result}</pre>
-        <button class="copyBtn" onclick="navigator.clipboard.writeText(\`${result.replace(/`/g,"")}\`)">
-        Copy Thumbnail
-        </button>
-      </div>
-    `;
-  }catch(err){
-    box.innerHTML="<div class='error'>"+err.message+"</div>";
-  }
+    try{
+        const result = await callGroq(prompt);
+        ideas.innerHTML="";
+        result.split("\n").forEach(line=>{
+            if(line.trim()){
+                const d=document.createElement("div");
+                d.className="idea";
+                d.innerText=line;
+                d.onclick=()=>produceFull(line);
+                ideas.appendChild(d);
+            }
+        });
+    }catch(err){
+        ideas.innerHTML="<div class='loading'>Error: "+err.message+"</div>";
+    }
 }
 
+// -------------------- Produce Full Script + Scenes --------------------
 async function produceFull(idea){
-  const container=document.getElementById("sceneContainer");
-  container.innerHTML="<div class='loading'>Generating scenes...</div>";
+    const container=document.getElementById("productionContainer");
+    container.innerHTML="<div class='loading'>🚀 Producing cinematic production system...</div>";
 
-  try{
-    const prompt=`
+    const masterPrompt=`
 Anda adalah sistem produksi YouTube Shorts profesional.
 
 Topik: ${idea}
 
-Buat 5 SCENE dengan format:
+Buat narasi 45-70 detik dengan format:
 
-[SCENE 1 – Selama ...]
-SCRIPT:
-Narasi progresif sesuai waktu.
+[NARASI]
+Gabungkan judul dan narasi progresif.
+Gunakan "Selama X [menit/jam/hari/minggu/bulan/tahun]" untuk setiap progresi.
 
-IMAGE PROMPT:
-Selalu diawali dengan:
-Place the skeleton character
+[SCENE]
+Pisahkan per scene:
+- SCRIPT: sesuaikan dengan bagian narasi tersebut
+- IMAGE PROMPT: selalu mulai dengan "Place the skeleton character", visual sesuai narasi
+- VIDEO PROMPT: prompt cinematic image-to-video
 
-VIDEO PROMPT:
-Prompt cinematic image-to-video.
-
-Gunakan waktu fleksibel.
-Setiap scene eskalatif.
+Jumlah scene sesuaikan dengan narasi.
+Setiap scene harus eskalatif.
 `;
 
-    const result=await callAI(prompt);
-    renderScenes(result);
-
-  }catch(err){
-    container.innerHTML="<div class='error'>"+err.message+"</div>";
-  }
+    try{
+        const result = await callGroq(masterPrompt);
+        renderSections(result);
+    }catch(err){
+        container.innerHTML="<div class='loading'>Error: "+err.message+"</div>";
+    }
 }
 
-function renderScenes(text){
-  const container=document.getElementById("sceneContainer");
-  container.innerHTML="";
+// -------------------- Render Sections --------------------
+function renderSections(text){
+    const container=document.getElementById("productionContainer");
+    container.innerHTML="";
 
-  const scenes=text.split("[SCENE").filter(s=>s.trim()!="");
+    // Split by markers
+    const sections=text.split(/\[SCENE\]|\[NARASI\]/).map(s=>s.trim()).filter(s=>s);
 
-  scenes.forEach(scene=>{
-    const fullText="[SCENE"+scene.trim();
+    if(sections.length>0){
+        // Narasi
+        const box=document.createElement("div");
+        box.className="section-box";
+        box.innerHTML=`
+            <div class="section-title">🧠 Narasi</div>
+            <div class="section-content" contenteditable="true">${sections[0]}</div>
+            <button class="copy-btn" onclick="copySection(this)">Copy</button>
+        `;
+        container.appendChild(box);
 
-    const div=document.createElement("div");
-    div.className="sceneBox";
+        // Scene boxes
+        for(let i=1;i<sections.length;i++){
+            const sceneBox=document.createElement("div");
+            sceneBox.className="section-box";
+            sceneBox.innerHTML=`
+                <div class="section-title">🎞 Scene ${i}</div>
+                <div class="section-content" contenteditable="true">${sections[i]}</div>
+                <button class="copy-btn" onclick="copySection(this)">Copy</button>
+            `;
+            container.appendChild(sceneBox);
+        }
+    }
+}
 
-    const pre=document.createElement("pre");
-    pre.textContent=fullText;
+// -------------------- Copy & Export --------------------
+function copySection(btn){
+    const text=btn.previousElementSibling.innerText;
+    navigator.clipboard.writeText(text);
+    btn.innerText="Copied ✔";
+    setTimeout(()=>btn.innerText="Copy",1500);
+}
 
-    const btn=document.createElement("button");
-    btn.className="copyBtn";
-    btn.innerText="Copy Scene";
-    btn.onclick=()=>navigator.clipboard.writeText(fullText);
-
-    div.appendChild(pre);
-    div.appendChild(btn);
-    container.appendChild(div);
-  });
+function exportJSON(){
+    const content=document.getElementById("productionContainer").innerText;
+    const blob=new Blob([JSON.stringify({production:content},null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="shorts-production-pack.json";
+    a.click();
 }
 </script>
-
 </body>
 </html>
