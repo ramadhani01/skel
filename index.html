@@ -188,16 +188,27 @@ async function generateIdeas(){
   container.innerHTML="<div class='loading'>Generating ideas...</div>";
 
   try{
-    const prompt=`
-Buat 10 ide YouTube Shorts tentang batas tubuh manusia.
+    const prompt = `
+Buat 10 ide YouTube Shorts tentang batas ekstrem tubuh manusia.
+
+GAYA WAJIB:
+- Format seperti:
+  "Berapa Lama..."
+  "Apa yang Terjadi Jika..."
+  "Seberapa Kuat..."
+- Fokus pada skenario ekstrem, survival, atau kegagalan biologis.
+- Harus memicu rasa penasaran dan sedikit menegangkan.
+- Hindari topik umum seperti olahraga, kesehatan umum, atau keselamatan kerja.
+- Jangan terlalu akademis.
+- Jangan terlalu formal.
+- Harus terasa seperti eksperimen ekstrem pada tubuh manusia.
 
 ATURAN:
 - Hanya judul.
 - Satu baris satu ide.
-- Tanpa deskripsi.
 - Tanpa numbering.
+- Tanpa deskripsi.
 `;
-
     const raw=await callAI(prompt);
     const ideas=cleanIdeas(raw);
     renderIdeas(ideas);
