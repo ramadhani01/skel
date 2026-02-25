@@ -319,31 +319,41 @@ Setiap scene harus eskalatif.
 }
 
 // -------------------- Render Sections --------------------
+// -------------------- Render Sections --------------------
 function renderSections(text){
-    const container=document.getElementById("productionContainer");
-    container.innerHTML="";
+    const container = document.getElementById("productionContainer");
+    container.innerHTML = "";
 
-    // Split by markers
-    const sections=text.split(/\[SCENE\]|\[NARASI\]/).map(s=>s.trim()).filter(s=>s);
+    // Pisahkan bagian NARASI dan SCENE
+    const sections = text.split(/\[SCENE\]|\[NARASI\]/).map(s => s.trim()).filter(s => s);
 
-    if(sections.length>0){
-        // Narasi
-        const box=document.createElement("div");
-        box.className="section-box";
-        box.innerHTML=`
+    if(sections.length > 0){
+        // ---- Narasi ----
+        const box = document.createElement("div");
+        box.className = "section-box";
+        box.innerHTML = `
             <div class="section-title">🧠 Narasi</div>
             <div class="section-content" contenteditable="true">${sections[0]}</div>
             <button class="copy-btn" onclick="copySection(this)">Copy</button>
         `;
         container.appendChild(box);
 
-        // Scene boxes
-        for(let i=1;i<sections.length;i++){
-            const sceneBox=document.createElement("div");
-            sceneBox.className="section-box";
-            sceneBox.innerHTML=`
+        // ---- Scene ----
+        for(let i = 1; i < sections.length; i++){
+            // Misalkan tiap scene dikembalikan dalam format:
+            // IMAGE PROMPT: ... \nVIDEO PROMPT: ...
+            // Kita pisahkan agar hanya prompt yang tampil di box
+            const sceneParts = sections[i].split(/IMAGE PROMPT:|VIDEO PROMPT:/).map(p => p.trim());
+
+            const sceneBox = document.createElement("div");
+            sceneBox.className = "section-box";
+
+            sceneBox.innerHTML = `
                 <div class="section-title">🎞 Scene ${i}</div>
-                <div class="section-content" contenteditable="true">${sections[i]}</div>
+                <div class="section-content" contenteditable="true">
+                    IMAGE PROMPT: ${sceneParts[1] ? sceneParts[1] : ""}
+                    \n\nVIDEO PROMPT: ${sceneParts[2] ? sceneParts[2] : ""}
+                </div>
                 <button class="copy-btn" onclick="copySection(this)">Copy</button>
             `;
             container.appendChild(sceneBox);
