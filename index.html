@@ -189,30 +189,31 @@ async function generateIdeas(){
 
   try{
     const prompt = `
-Buat 10 ide YouTube Shorts tentang batas ekstrem tubuh manusia.
+Buat 10 ide YouTube Shorts tentang skenario ekstrem yang LANGSUNG menyerang tubuh manusia secara fisik.
 
-GAYA WAJIB:
-- Format seperti:
-  "Berapa Lama..."
-  "Apa yang Terjadi Jika..."
-  "Bagaimana jika..."
-- Fokus pada skenario ekstrem, survival, atau kegagalan biologis.
+WAJIB:
+- Setiap ide HARUS berupa situasi spesifik dan ekstrem.
+- Gunakan angka, durasi, suhu, tekanan, atau jumlah (contoh: 10 detik, 200°C, 100 lebah).
+- Harus terasa seperti eksperimen ekstrem pada tubuh.
+- Fokus pada reaksi biologis tubuh saat kondisi ekstrem terjadi.
 - Harus memicu rasa penasaran dan sedikit menegangkan.
-- Hindari topik umum seperti olahraga, kesehatan umum, atau keselamatan kerja.
-- Jangan terlalu akademis.
-- Jangan terlalu formal.
-- Harus terasa seperti eksperimen ekstrem pada tubuh manusia.
+- Bukan topik umum, bukan teori, bukan konsep abstrak.
+- Jangan bahas olahraga, kesehatan umum, keselamatan kerja, atau pembahasan akademis.
 
-ATURAN:
+FORMAT WAJIB:
 - Hanya judul.
 - Satu baris satu ide.
 - Tanpa numbering.
 - Tanpa deskripsi.
+- Gunakan format seperti:
+  "Berapa Lama..."
+  "Apa yang Terjadi Jika..."
+  "Bagaimana Jika..."
 
-Contoh BENAR:
-Bagaimana jika seekor hiu menggigit lenganmu sekali lalu melepaskannya?
-Apa yang terjadi jika kamu disengat 100 lebah sekaligus?
-Berapa Lama Kamu Bisa Bertahan Tanpa Oksigen di Bawah Air?
+Contoh gaya yang BENAR:
+Apa yang terjadi jika paru-parumu terisi asap beracun selama 30 detik?
+Berapa lama kamu bisa bertahan di suhu -50°C tanpa perlindungan?
+Bagaimana jika tubuhmu terkena gelombang kejut ledakan dari jarak 1 meter?
 `;
     const raw=await callAI(prompt);
     const ideas=cleanIdeas(raw);
