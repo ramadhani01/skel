@@ -189,32 +189,42 @@ async function generateIdeas(){
 
   try{
     const prompt = `
-Hasilkan 10 topik video viral (misalnya ekstrem
-lingkungan, serangan hewan, atau reaksi kimia).
+Buat 10 judul video tentang satu kejadian ekstrem yang tiba-tiba terjadi pada tubuh manusia.
+
+Gunakan campuran dari 3 gaya berikut:
+
+1) Realistis Sehari-hari
+   Kejadian yang bisa terjadi pada orang biasa dalam kehidupan normal
+   (contoh: kebakaran rumah, gigitan anjing, tersiram air panas)
+
+2) Realistis tapi Jarang Terjadi
+   Kejadian yang mungkin terjadi tapi tidak umum
+   (contoh: serangan hewan liar, paparan zat beracun, ledakan kecil)
+
+3) Ekstrem tapi Masih Mungkin
+   Kejadian berat dan menegangkan, tapi tetap realistis dan tidak seperti film aksi
+   (contoh: terlalu dekat dengan ledakan, terjebak di ruang penuh asap, terkena semburan api)
 
 WAJIB:
-- Setiap ide HARUS berupa situasi spesifik dan ekstrem.
-- Gunakan angka, durasi, suhu, tekanan, atau jumlah (contoh: 10 detik, 200°C, 100 lebah).
-- Harus terasa seperti eksperimen ekstrem pada tubuh.
-- Fokus pada reaksi biologis tubuh saat kondisi ekstrem terjadi.
-- Harus memicu rasa penasaran dan sedikit menegangkan.
-- Bukan topik umum, bukan teori, bukan konsep abstrak.
-- Jangan bahas olahraga, kesehatan umum, keselamatan kerja, atau pembahasan akademis.
+- Setiap judul harus berupa satu kejadian spesifik dan langsung menyerang tubuh.
+- Harus ada penyebab yang jelas (hewan, api, ledakan, racun, suhu ekstrem, tekanan, dll).
+- Jangan menyebut angka spesifik seperti jarak, detik, suhu, atau jumlah.
+- Buat terasa menggantung dan memicu rasa penasaran.
+- Harus realistis dan mungkin terjadi di dunia nyata.
+- Jangan membahas konsep umum, teori, olahraga, atau topik pelajaran sekolah.
+- Jangan terlalu akademis atau formal.
 
 FORMAT WAJIB:
 - Hanya judul.
 - Satu baris satu ide.
 - Tanpa numbering.
 - Tanpa deskripsi.
-- Gunakan format seperti:
-  "Berapa Lama..."
-  "Apa yang Terjadi Jika..."
-  "Bagaimana Jika..."
+- Gunakan pola seperti:
 
-Contoh gaya yang BENAR:
-Apa yang terjadi jika paru-parumu terisi asap beracun selama 30 detik?
-Berapa lama kamu bisa bertahan di suhu -50°C tanpa perlindungan?
-Bagaimana jika tubuhmu terkena gelombang kejut ledakan dari jarak 1 meter?
+"Bagaimana jika..."
+"Apa yang terjadi jika..."
+
+Jika judul terdengar seperti adegan film aksi yang mustahil atau terlalu berlebihan, jangan gunakan.
 `;
     const raw=await callAI(prompt);
     const ideas=cleanIdeas(raw);
