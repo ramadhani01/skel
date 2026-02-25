@@ -302,13 +302,20 @@ Gabungkan judul dan narasi progresif.
 Gunakan "Selama X [menit/jam/hari/minggu/bulan/tahun]" untuk setiap progresi.
 
 [SCENE]
-Pisahkan per scene:
+Pisahkan setiap progresi narasi menjadi scene tersendiri.
+Untuk setiap scene, buat:
 - SCRIPT: sesuaikan dengan bagian narasi tersebut
-- IMAGE PROMPT: selalu mulai dengan "Place the skeleton character", visual sesuai narasi
-- VIDEO PROMPT: prompt cinematic image-to-video
+- IMAGE PROMPT: buat cinematic prompt realistis
+    - Selalu mulai dengan "Ultra-realistic cinematic 3D render dari sosok kerangka humanoid dengan lapisan tubuh transparan seperti kristal/gelas menutupi tulang, tengkorak anatomi yang jelas dengan gigi terlihat dan memiliki bola mata asli, tampilan semi-x-ray, realitas edukatif dan surealis, tidak menakutkan, bukan kartun, detail ultra tinggi, fokus tajam, 8K."
+    - Sertakan lokasi/environment, pose skeleton, perspektif kamera, pencahayaan & mood
+    - Tambahkan efek tambahan sesuai narasi (misal: darah, asap, debu, kabut, air, api)
+    - Pertahankan konsistensi kerangka 3D dan detail anatomi
+    - Akhiri dengan "Rendered in clean cinematic 3D, highly detailed"
+- VIDEO PROMPT: ubah IMAGE PROMPT menjadi cinematic image-to-video
 
-Jumlah scene sesuaikan dengan narasi.
-Setiap scene harus eskalatif.
+Jumlah scene menyesuaikan panjang narasi.
+Setiap scene harus eskalatif dan dramatis.
+Buat prompt image cukup jelas agar hasil render realistis dan cinematic, bukan deskripsi literal.
 `;
 
     try{
