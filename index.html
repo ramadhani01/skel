@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO Cinematic Script Generator</title>
+<title>Consistent Viral Script Generator</title>
 
 <style>
 body{
     background:#0f0f0f;
-    color:#fff;
+    color:#ffffff;
     font-family:Arial;
     padding:20px;
 }
@@ -27,14 +27,6 @@ textarea{
     padding:10px;
     margin-top:10px;
 }
-input{
-    width:100%;
-    padding:8px;
-    background:#111;
-    color:#fff;
-    border:1px solid #333;
-    margin-top:5px;
-}
 button{
     background:#00ffc3;
     border:none;
@@ -43,36 +35,34 @@ button{
     cursor:pointer;
 }
 button:hover{opacity:0.8;}
-.output-block{
-    background:#111;
-    padding:10px;
-    margin-top:15px;
-    border-radius:6px;
-}
 </style>
 </head>
 <body>
 
-<h1>PRO Cinematic Generator – GPT-OSS-120B</h1>
+<h1>Viral Simulation Script Generator (Consistent Mode)</h1>
 
 <div class="section">
-<h2>🔑 Masukkan Groq API Key</h2>
-<input type="password" id="apikey" placeholder="Tempel API Key Groq di sini">
+<h2>🔑 API Key</h2>
+<input type="password" id="apikey" placeholder="Tempel Groq API Key di sini" style="width:100%;padding:8px;background:#111;color:#fff;border:1px solid #333;">
 </div>
 
 <div class="section">
-<button onclick="generateIdea()">Generate Ide Otomatis</button>
-<button onclick="generateFull()">Generate Full Script</button>
-<div class="output-block">
-<h3>Ide Terpilih:</h3>
-<textarea id="ideaBox" rows="2"></textarea>
-<button onclick="copyText('ideaBox')">Copy</button>
-</div>
+<h2>STEP 1 – Generate 10 Ide</h2>
+<button onclick="generateIdeas()">Generate Ide</button>
+<textarea id="ideasBox" rows="10"></textarea>
 </div>
 
 <div class="section">
-<h2>🎬 Output Lengkap</h2>
-<div id="result"></div>
+<h2>STEP 2 – Pilih Ide & Generate Script</h2>
+<input type="text" id="chosenIdea" placeholder="Copy salah satu ide ke sini">
+<button onclick="generateScript()">Generate Script</button>
+<textarea id="scriptBox" rows="15"></textarea>
+</div>
+
+<div class="section">
+<h2>STEP 3 – Generate Prompt Visual</h2>
+<button onclick="generateVisual()">Generate Image & Video Prompts</button>
+<textarea id="visualBox" rows="20"></textarea>
 </div>
 
 <script>
@@ -89,11 +79,21 @@ headers:{
 body:JSON.stringify({
 model:"openai/gpt-oss-120b",
 messages:[
-{role:"system",content:"You are a professional serious cinematic educational scriptwriter."},
+{
+role:"system",
+content:`Anda adalah Penulis Naskah Viral YouTube yang berspesialisasi dalam simulasi "Bagaimana jika" "Berapa lama kamu bisa" "Apa yang terjadi jika kamu" yang sangat realistis (gaya: Animasi anatomi 3D seperti "Perbandingan" atau "Skenario Tubuh Manusia").
+
+Pertahankan terminologi visual berikut secara IDENTIK setiap kali digunakan:
+"Ultra-realistic cinematic 3D render dari sosok kerangka humanoid dengan lapisan tubuh transparan seperti kristal/gelas menutupi tulang tengkorak anatomi yang jelas dengan gigi terlihat dan memiliki bola mata tampilan semi-x-ray realitas edukatif dan surealis, tidak menakutkan bukan kartun detail ultra tinggi fokus tajam 8K"
+
+Nada: penasaran namun tetap mendidik.
+Fokus pada retensi tinggi.
+Jangan improvisasi gaya.`
+},
 {role:"user",content:prompt}
 ],
-temperature:0.7,
-max_tokens:4000
+temperature:0.6,
+max_tokens:3500
 })
 });
 
@@ -101,58 +101,65 @@ const data = await response.json();
 return data.choices[0].message.content;
 }
 
-async function generateIdea(){
+async function generateIdeas(){
 
 const prompt = `
-Buat 1 ide topik viral untuk YouTube Shorts serius edukatif.
-Format hanya 1 judul singkat.
-Gaya: realistis, ekstrem, ilmiah.
+Brainstorming:
+Hasilkan 10 topik video viral dalam format daftar bernomor.
+Gunakan format:
+Bagaimana jika...
+Apa yang terjadi jika kamu...
+Berapa lama kamu bisa...
+Fokus ekstrem lingkungan, serangan hewan, atau reaksi kimia.
 `;
 
 const result = await callGroq(prompt);
-document.getElementById("ideaBox").value = result.trim();
+document.getElementById("ideasBox").value = result;
 }
 
-async function generateFull(){
+async function generateScript(){
 
-const idea = document.getElementById("ideaBox").value;
+const idea = document.getElementById("chosenIdea").value;
 
 const prompt = `
-Buat konten YouTube Shorts serius edukatif.
+Tulis naskah 45-60 detik dalam format paragraf.
 
 Struktur:
-1. Judul (huruf besar).
-2. Narasi dimulai langsung dengan:
-   Selama 10 menit...
-   Selama 1 jam...
-   Selama 6 jam...
-   Selama 24 jam...
-3. 4 scene progresif.
-4. Setelah narasi:
-   - Prompt IMAGE per scene
-   - Prompt VIDEO per scene
-5. Lokasi harus terkunci dan konsisten.
-6. Karakter:
-Humanoid skeleton ultra-realistic 3D, transparent glass-like body, visible anatomical skull, semi x-ray eyeballs, 8K cinematic, non-horror.
+Tunjukkan eskalasi atau kerusakan progresif menggunakan progresi waktu:
+Selama 1 menit...
+Selama 5 menit...
+Selama 1 jam...
+Selama 1 hari...
 
 Topik: ${idea}
 `;
 
 const result = await callGroq(prompt);
-
-document.getElementById("result").innerHTML = `
-<div class="output-block">
-<textarea id="fullOutput" rows="25">${result}</textarea>
-<button onclick="copyText('fullOutput')">Copy Semua</button>
-</div>
-`;
+document.getElementById("scriptBox").value = result;
 }
 
-function copyText(id){
-const text = document.getElementById(id);
-text.select();
-document.execCommand("copy");
-alert("Copied!");
+async function generateVisual(){
+
+const script = document.getElementById("scriptBox").value;
+
+const prompt = `
+Berdasarkan skrip berikut:
+
+${script}
+
+Hasilkan:
+1. Prompt Gambar untuk setiap progresi waktu.
+2. Prompt Video untuk setiap progresi waktu.
+
+Pastikan setiap prompt menggunakan terminologi karakter berikut secara IDENTIK:
+"Ultra-realistic cinematic 3D render dari sosok kerangka humanoid dengan lapisan tubuh transparan seperti kristal/gelas menutupi tulang tengkorak anatomi yang jelas dengan gigi terlihat dan memiliki bola mata tampilan semi-x-ray realitas edukatif dan surealis, tidak menakutkan bukan kartun detail ultra tinggi fokus tajam 8K"
+
+Pastikan konsistensi lokasi dan pencahayaan.
+Tambahkan detail fisika realistis (cairan, pecahan, atau partikel).
+`;
+
+const result = await callGroq(prompt);
+document.getElementById("visualBox").value = result;
 }
 
 </script>
