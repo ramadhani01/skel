@@ -1,172 +1,154 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viral 3D Generator - GPT OSS 20B</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>YouTube Shorts AI Generator</title>
 
 <style>
 body{
     margin:0;
-    background:#0f1117;
-    font-family:Segoe UI, sans-serif;
+    font-family:Arial, sans-serif;
+    background:#0f172a;
     color:white;
 }
 .container{
-    max-width:1000px;
+    max-width:900px;
     margin:auto;
     padding:20px;
 }
-h1{text-align:center;}
-input{
+h1{
+    text-align:center;
+    color:#38bdf8;
+}
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+input, textarea{
     width:100%;
     padding:10px;
-    border-radius:6px;
+    border-radius:8px;
     border:none;
-    margin-top:5px;
-    background:#1a1d29;
-    color:white;
+    margin-top:10px;
+    margin-bottom:10px;
+    font-size:14px;
 }
 button{
-    background:#00b894;
+    background:#38bdf8;
+    color:black;
+    padding:10px 15px;
     border:none;
-    padding:10px 16px;
-    color:white;
-    border-radius:6px;
-    cursor:pointer;
-    margin-top:10px;
-}
-button:hover{opacity:0.9;}
-.idea{
-    background:#1a1d29;
-    padding:12px;
-    margin:8px 0;
-    border-radius:6px;
-    cursor:pointer;
-}
-.idea:hover{background:#22263a;}
-.box{
-    background:#1a1d29;
-    padding:15px;
     border-radius:8px;
-    margin-top:20px;
-}
-.scene{
-    background:#22263a;
-    padding:15px;
-    border-radius:8px;
-    margin-top:15px;
-}
-textarea{
-    width:100%;
-    background:#0f1117;
-    color:white;
-    border:1px solid #333;
-    border-radius:6px;
-    padding:10px;
-    resize:none;
-}
-.copy-btn{
-    background:#5865f2;
-    margin-top:5px;
-}
-.loading{
-    text-align:center;
-    margin-top:15px;
+    cursor:pointer;
     font-weight:bold;
 }
-.error{
-    background:#ff4757;
+button:hover{
+    opacity:0.8;
+}
+.idea{
+    background:#334155;
     padding:10px;
-    border-radius:6px;
-    margin-top:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+    cursor:pointer;
+}
+.idea:hover{
+    background:#475569;
+}
+#result{
+    white-space:pre-line;
+    background:#0f172a;
+    padding:15px;
+    border-radius:8px;
+    border:1px solid #334155;
+}
+.error{
+    color:red;
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-<h1>Viral YouTube 3D Generator (GPT-OSS-20B)</h1>
+<h1>🔥 AI YouTube Shorts Generator</h1>
 
-<label>Masukkan GROQ API Key:</label>
-<input type="password" id="apiKey" placeholder="gsk_...">
-
+<div class="card">
+<label>Masukkan GROQ API Key</label>
+<input type="password" id="apiKey" placeholder="Masukkan API Key Groq"/>
 <button onclick="saveKey()">Simpan Key</button>
-<button onclick="generateIdeas()">Generate 10 Ide</button>
+</div>
 
+<div class="card">
+<label>Masukkan Topik</label>
+<input type="text" id="topic" placeholder="Contoh: Jika manusia tidak tidur"/>
+<button onclick="generateIdeas()">Generate Ide</button>
+</div>
+
+<div class="card">
+<h3>Ide Video</h3>
 <div id="ideas"></div>
-<div id="scriptSection"></div>
-<div id="errorPanel"></div>
+</div>
+
+<div class="card">
+<h3>Script 45-70 Detik</h3>
+<div id="result"></div>
+</div>
+
+<div id="error" class="error"></div>
 
 </div>
 
 <script>
 
-// ================= LOAD & SAVE KEY =================
-
 window.onload = function(){
-    const savedKey = localStorage.getItem("groq_api_key");
+    const savedKey = localStorage.getItem("GROQ_API_KEY");
     if(savedKey){
         document.getElementById("apiKey").value = savedKey;
     }
-};
+}
 
 function saveKey(){
-    const key = document.getElementById("apiKey").value.trim();
-    if(!key){ alert("Masukkan key dulu"); return;}
-    localStorage.setItem("groq_api_key", key);
-    alert("API Key disimpan!");
+    const key = document.getElementById("apiKey").value;
+    localStorage.setItem("GROQ_API_KEY", key);
+    alert("API Key berhasil disimpan!");
 }
-
-// ================= MASTER PROMPT =================
-
-const MASTER_PROMPT = `
-Anda adalah Penulis Naskah Viral YouTube spesialis simulasi "Bagaimana jika", "Apa yang terjadi jika kamu", "Berapa lama kamu bisa".
-
-WAJIB konsisten visual:
-Ultra-realistic cinematic 3D render dari sosok kerangka humanoid dengan lapisan tubuh transparan seperti kristal/gelas menutupi tulang tengkorak anatomi yang jelas dengan gigi terlihat dan memiliki bola mata tampilan semi-x-ray realitas edukatif dan surealis, tidak menakutkan bukan kartun detail ultra tinggi fokus tajam 8K
-
-Format output WAJIB:
-
-NARASI:
-(paragraf 45-60 detik dengan eskalasi progresif)
-
-SCENE 1 IMAGE:
-...
-
-SCENE 1 VIDEO:
-...
-
-SCENE 2 IMAGE:
-...
-
-SCENE 2 VIDEO:
-...
-`;
-
-// ================= ERROR =================
 
 function showError(msg){
-    document.getElementById("errorPanel").innerHTML =
-        `<div class="error">${msg}</div>`;
+    document.getElementById("error").innerText = msg;
 }
 
-function clearError(){
-    document.getElementById("errorPanel").innerHTML="";
-}
+async function callGroq(prompt){
+    const apiKey = localStorage.getItem("GROQ_API_KEY");
+    if(!apiKey){
+        showError("API Key belum disimpan!");
+        return null;
+    }
 
-// ================= PARSE OUTPUT =================
+    const response = await fetch("https://api.groq.com/openai/v1/responses",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer " + apiKey
+        },
+        body: JSON.stringify({
+            model: "openai/gpt-oss-20b",
+            input: prompt
+        })
+    });
 
-function extractText(data){
+    const data = await response.json();
+
     let text = "";
 
-    if (data.output && Array.isArray(data.output)) {
-        data.output.forEach(item => {
-            if (item.content && Array.isArray(item.content)) {
-                item.content.forEach(part => {
-                    if (part.type === "output_text") {
+    if(data.output){
+        data.output.forEach(item=>{
+            if(item.content){
+                item.content.forEach(part=>{
+                    if(part.type==="output_text"){
                         text += part.text;
                     }
                 });
@@ -174,161 +156,69 @@ function extractText(data){
         });
     }
 
-    return text.trim();
+    return text;
 }
-
-// ================= GENERATE IDEAS =================
 
 async function generateIdeas(){
-    clearError();
-    const apiKey = document.getElementById("apiKey").value.trim();
-    if(!apiKey){ showError("Masukkan API Key!"); return;}
+    showError("");
+    document.getElementById("ideas").innerHTML="Loading...";
 
-    document.getElementById("ideas").innerHTML="<div class='loading'>Generating Ideas...</div>";
+    const topic = document.getElementById("topic").value;
 
-    try{
-        const response = await fetch("https://api.groq.com/openai/v1/responses",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization":"Bearer "+apiKey
-            },
-            body:JSON.stringify({
-                model:"openai/gpt-oss-20b",
-                input: MASTER_PROMPT + "\n\nBuat 10 judul saja tanpa penjelasan."
-            })
-        });
+    const prompt = `
+Buatkan 5 ide video YouTube Shorts gaya:
+"Apa yang terjadi jika..."
+Format hanya daftar ide.
+Topik utama: ${topic}
+`;
 
-        const data = await response.json();
+    const text = await callGroq(prompt);
 
-        if(!response.ok){
-            showError(JSON.stringify(data));
-            document.getElementById("ideas").innerHTML="";
-            return;
-        }
-
-        const text = extractText(data);
-
-        if(!text){
-            showError("Model tidak mengembalikan output.");
-            return;
-        }
-
-        const lines = text.split("\n").filter(l=>l.trim()!="");
-
-        document.getElementById("ideas").innerHTML="<h3>Pilih Judul:</h3>";
-
-        lines.forEach(line=>{
-            const clean=line.replace(/^\d+[\.\-]\s*/,"");
-            const div=document.createElement("div");
-            div.className="idea";
-            div.innerText=clean;
-            div.onclick=()=>generateScript(clean);
-            document.getElementById("ideas").appendChild(div);
-        });
-
-    }catch(err){
-        showError(err.message);
-    }
-}
-
-// ================= GENERATE SCRIPT =================
-
-async function generateScript(title){
-    clearError();
-    const apiKey = document.getElementById("apiKey").value.trim();
-
-    document.getElementById("scriptSection").innerHTML="<div class='loading'>Generating Script...</div>";
-
-    try{
-        const response = await fetch("https://api.groq.com/openai/v1/responses",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization":"Bearer "+apiKey
-            },
-            body:JSON.stringify({
-                model:"openai/gpt-oss-20b",
-                input: MASTER_PROMPT + "\n\nJudul: " + title
-            })
-        });
-
-        const data = await response.json();
-
-        if(!response.ok){
-            showError(JSON.stringify(data));
-            document.getElementById("scriptSection").innerHTML="";
-            return;
-        }
-
-        const text = extractText(data);
-
-        if(!text){
-            showError("Model tidak mengembalikan output.");
-            return;
-        }
-
-        renderScript(text);
-        window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
-
-    }catch(err){
-        showError(err.message);
-    }
-}
-
-// ================= RENDER SCRIPT =================
-
-function renderScript(text){
-
-    const narasiMatch=text.match(/NARASI:(.*?)(SCENE 1 IMAGE:)/s);
-    const narasi=narasiMatch?narasiMatch[1].trim():"Narasi tidak ditemukan";
-
-    let scenes=[];
-    const regex=/SCENE (\d+) IMAGE:(.*?)SCENE \1 VIDEO:(.*?)(?=SCENE \d+ IMAGE:|$)/gs;
-    let match;
-    while((match=regex.exec(text))!==null){
-        scenes.push({
-            num:match[1],
-            image:match[2].trim(),
-            video:match[3].trim()
-        });
+    if(!text){
+        showError("Gagal generate ide.");
+        return;
     }
 
-    let html=`
-    <div class="box">
-        <h2>NARASI</h2>
-        <textarea readonly rows="8">${narasi}</textarea>
-        <button class="copy-btn" onclick="copyText(\`${narasi}\`)">Copy Narasi</button>
-    </div>
-    <div class="box">
-        <h2>PROMPT PER SCENE</h2>
-    `;
+    const lines = text.split("\n").filter(l=>l.trim()!="");
 
-    scenes.forEach(scene=>{
-        html+=`
-        <div class="scene">
-            <h3>Scene ${scene.num}</h3>
+    const ideasDiv = document.getElementById("ideas");
+    ideasDiv.innerHTML="";
 
-            <b>Image Prompt</b>
-            <textarea readonly rows="5">${scene.image}</textarea>
-            <button class="copy-btn" onclick="copyText(\`${scene.image}\`)">Copy Image</button>
-
-            <br><br>
-
-            <b>Video Prompt</b>
-            <textarea readonly rows="5">${scene.video}</textarea>
-            <button class="copy-btn" onclick="copyText(\`${scene.video}\`)">Copy Video</button>
-        </div>
-        `;
+    lines.forEach(line=>{
+        const div = document.createElement("div");
+        div.className="idea";
+        div.innerText=line;
+        div.onclick=()=>generateScript(line);
+        ideasDiv.appendChild(div);
     });
-
-    html+="</div>";
-    document.getElementById("scriptSection").innerHTML=html;
 }
 
-function copyText(text){
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
+async function generateScript(idea){
+    showError("");
+    document.getElementById("result").innerText="Generating script...";
+
+    const prompt = `
+Buat narasi YouTube Shorts durasi 45-70 detik.
+Format WAJIB:
+
+Baris pertama = JUDUL
+Lalu progresi waktu dengan format:
+"Selama X detik/menit/jam..."
+
+Gaya edukatif anatomi 3D.
+Jangan lebih dari 70 detik.
+
+Topik: ${idea}
+`;
+
+    const text = await callGroq(prompt);
+
+    if(!text){
+        showError("Gagal generate script.");
+        return;
+    }
+
+    document.getElementById("result").innerText = text;
 }
 
 </script>
