@@ -104,7 +104,7 @@ textarea{
 
 <script>
 
-// ================= SAVE KEY =================
+// ================= LOAD & SAVE KEY =================
 
 window.onload = function(){
     const savedKey = localStorage.getItem("groq_api_key");
@@ -157,6 +157,26 @@ function clearError(){
     document.getElementById("errorPanel").innerHTML="";
 }
 
+// ================= PARSE OUTPUT =================
+
+function extractText(data){
+    let text = "";
+
+    if (data.output && Array.isArray(data.output)) {
+        data.output.forEach(item => {
+            if (item.content && Array.isArray(item.content)) {
+                item.content.forEach(part => {
+                    if (part.type === "output_text") {
+                        text += part.text;
+                    }
+                });
+            }
+        });
+    }
+
+    return text.trim();
+}
+
 // ================= GENERATE IDEAS =================
 
 async function generateIdeas(){
@@ -179,15 +199,20 @@ async function generateIdeas(){
             })
         });
 
+        const data = await response.json();
+
         if(!response.ok){
-            const errText = await response.text();
-            showError(errText);
+            showError(JSON.stringify(data));
             document.getElementById("ideas").innerHTML="";
             return;
         }
 
-        const data = await response.json();
-        const text = data.output_text;
+        const text = extractText(data);
+
+        if(!text){
+            showError("Model tidak mengembalikan output.");
+            return;
+        }
 
         const lines = text.split("\n").filter(l=>l.trim()!="");
 
@@ -228,15 +253,20 @@ async function generateScript(title){
             })
         });
 
+        const data = await response.json();
+
         if(!response.ok){
-            const errText = await response.text();
-            showError(errText);
+            showError(JSON.stringify(data));
             document.getElementById("scriptSection").innerHTML="";
             return;
         }
 
-        const data = await response.json();
-        const text = data.output_text;
+        const text = extractText(data);
+
+        if(!text){
+            showError("Model tidak mengembalikan output.");
+            return;
+        }
 
         renderScript(text);
         window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
@@ -246,7 +276,7 @@ async function generateScript(title){
     }
 }
 
-// ================= RENDER =================
+// ================= RENDER SCRIPT =================
 
 function renderScript(text){
 
