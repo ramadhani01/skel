@@ -1,380 +1,172 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AI Shorts Studio PRO</title>
-
+<meta charset="UTF-8">
+<title>Extreme Anatomy Generator PRO</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-body{
-    margin:0;
-    font-family:'Inter',sans-serif;
-    background: radial-gradient(circle at 20% 20%, #1a1a2e, #0f0f0f 60%);
-    color:white;
-    overflow-x:hidden;
-}
-
-body::before{
-    content:"";
-    position:fixed;
-    top:-200px;
-    left:-200px;
-    width:600px;
-    height:600px;
-    background:radial-gradient(circle,#ff3c00,transparent 70%);
-    opacity:0.15;
-    filter:blur(100px);
-    animation:floatGlow 8s ease-in-out infinite alternate;
-    z-index:-1;
-}
-
-@keyframes floatGlow{
-    from{transform:translate(0,0);}
-    to{transform:translate(100px,80px);}
-}
-
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:40px 25px;
-}
-
-h1{
-    font-size:32px;
-    background:linear-gradient(90deg,#ff3c00,#ff9900);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    font-weight:700;
-}
-
-.card{
-    backdrop-filter:blur(20px);
-    background:rgba(255,255,255,0.05);
-    padding:25px;
-    border-radius:20px;
-    margin-bottom:30px;
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 8px 32px rgba(0,0,0,0.4);
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 40px rgba(255,60,0,0.2);
-}
-
-input{
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:none;
-    background:rgba(255,255,255,0.07);
-    color:white;
-    font-size:14px;
-    outline:none;
-}
-
-button{
-    padding:12px 20px;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    font-weight:600;
-    margin-top:12px;
-    background:linear-gradient(90deg,#ff3c00,#ff7a00);
-    color:white;
-    transition:0.3s;
-}
-
-button:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 20px rgba(255,60,0,0.6);
-}
-
-.secondary{
-    background:rgba(255,255,255,0.08);
-}
-
-.idea{
-    background:rgba(255,255,255,0.05);
-    padding:14px;
-    border-radius:14px;
-    margin-top:12px;
-    cursor:pointer;
-    transition:0.3s;
-    border:1px solid transparent;
-}
-
-.idea:hover{
-    background:rgba(255,255,255,0.1);
-    border:1px solid rgba(255,60,0,0.4);
-    transform:scale(1.02);
-}
-
-.section-box{
-    background:rgba(255,255,255,0.04);
-    padding:20px;
-    border-radius:16px;
-    margin-bottom:20px;
-    border:1px solid rgba(255,255,255,0.08);
-    animation:fadeIn 0.6s ease forwards;
-    transition:0.3s;
-}
-
-.section-box:hover{
-    border:1px solid rgba(255,60,0,0.5);
-    box-shadow:0 0 25px rgba(255,60,0,0.2);
-}
-
-.section-title{
-    font-weight:700;
-    font-size:16px;
-    margin-bottom:10px;
-    color:#ff7a00;
-}
-
-.section-content{
-    white-space:pre-wrap;
-    line-height:1.7;
-    color:#e0e0e0;
-    font-size:14px;
-}
-
-.copy-btn{
-    background:rgba(255,255,255,0.08);
-    padding:6px 12px;
-    font-size:12px;
-    margin-top:12px;
-    border-radius:8px;
-}
-
-.success{
-    color:#00ffb3;
-}
-
-.loading{
-    color:#999;
-    font-style:italic;
-}
-
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(15px);}
-    to{opacity:1;transform:translateY(0);}
-}
+body { font-family: Arial; background:#0f0f0f; color:#eee; padding:20px; }
+textarea, input, select { width:100%; margin:10px 0; padding:10px; background:#1c1c1c; color:#fff; border:1px solid #333; }
+button { padding:8px 15px; margin:5px 5px 5px 0; background:#ff3c00; color:#fff; border:none; cursor:pointer; }
+button:hover { background:#ff5c2a; }
+.section { background:#111; padding:15px; margin-top:20px; border:1px solid #333; }
+.scene { border-top:1px solid #333; padding-top:15px; margin-top:15px; }
+.copyBtn { background:#2a2a2a; }
+.copyBtn:hover { background:#444; }
+h3 { margin-bottom:5px; }
 </style>
 </head>
 <body>
-<div class="container">
 
-<h1>🔥 AI Shorts Studio PRO</h1>
+<h2>Extreme Anatomy Generator PRO</h2>
 
-<!-- API Key -->
-<div class="card">
-<h3>Groq API Key</h3>
-<input type="password" id="apiKeyInput" placeholder="Masukkan API Key">
-<button onclick="saveKey()">Simpan</button>
-<button class="secondary" onclick="clearKey()">Hapus</button>
-<div id="status"></div>
-</div>
+<label>Groq API Key:</label>
+<input type="password" id="apiKey">
 
-<!-- Generate Ide -->
-<div class="card">
-<button onclick="generateIdeas()">Generate 10 Ide Viral</button>
-<div id="ideas"></div>
-</div>
+<label>Pilih Model:</label>
+<select id="model">
+<option value="llama3-70b-8192">llama3-70b-8192</option>
+<option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+</select>
 
-<!-- Production -->
-<div class="card">
-<h3>🎬 Production Studio Output</h3>
-<div id="productionContainer"></div>
-<button onclick="exportJSON()">Export Production JSON</button>
-</div>
+<button onclick="generateIdeas()">Generate 10 Ide</button>
+<div class="section" id="ideasOutput"></div>
 
-</div>
+<label>Pilih Ide:</label>
+<textarea id="selectedIdea" rows="2"></textarea>
+
+<button onclick="generateFull()">Generate Full Script + Prompts</button>
+
+<div class="section" id="scriptOutput"></div>
+<div class="section" id="scenesContainer"></div>
 
 <script>
-window.onload=()=>{
-    const k=localStorage.getItem("groq_key");
-    if(k){
-        apiKeyInput.value=k;
-        status.innerHTML="<div class='success'>API Key tersimpan ✔</div>";
-    }
-};
+async function callGroq(prompt) {
+    const apiKey = document.getElementById("apiKey").value;
+    const model = document.getElementById("model").value;
 
-function saveKey(){
-    const k=apiKeyInput.value.trim();
-    if(!k)return alert("Masukkan API Key");
-    localStorage.setItem("groq_key",k);
-    status.innerHTML="<div class='success'>API Key tersimpan ✔</div>";
-}
-
-function clearKey(){
-    localStorage.removeItem("groq_key");
-    apiKeyInput.value="";
-    status.innerHTML="API Key dihapus.";
-}
-
-async function callGroq(prompt){
-    const key=localStorage.getItem("groq_key");
-    if(!key)return alert("Simpan API Key dulu");
-
-    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "Authorization":`Bearer ${key}`
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + apiKey
         },
-        body:JSON.stringify({
-            model:"llama-3.3-70b-versatile",
-            messages:[{role:"user",content:prompt}],
-            temperature:0.9
+        body: JSON.stringify({
+            model: model,
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.9
         })
     });
-    const data=await res.json();
-    if(data.error) throw new Error(data.error.message);
+
+    const data = await response.json();
     return data.choices[0].message.content;
 }
 
-// -------------------- Generate Ide --------------------
-async function generateIdeas(){
-    ideas.innerHTML="<div class='loading'>Generating ideas...</div>";
-
+async function generateIdeas() {
     const prompt = `
-Buat 10 ide YouTube Shorts tentang satu kejadian ekstrem dan tiba-tiba yang menyerang tubuh manusia.
-
-GAYA WAJIB:
-1) Realistis Sehari-hari: kejadian bisa terjadi dalam kehidupan normal (misal: tersiram air panas, tersengat serangga). 
-2) Realistis tapi Jarang Terjadi: kejadian mungkin tapi tidak umum (misal: gigitan hewan liar, serangan predator kecil, paparan racun alami).
-3) Ekstrem tapi Masih Mungkin: kejadian berat dan menegangkan, tapi realistis, bukan film aksi (misal: terjebak di reruntuhan, terkena semburan api).
-
-WAJIB:
-- Setiap ide harus satu kejadian spesifik dan langsung menyerang tubuh.
-- Harus ada penyebab yang jelas (hewan, api, ledakan, racun, suhu ekstrem, tekanan, dll).
-- Gunakan variasi kejadian: hewan, lingkungan, reaksi kimia, kecelakaan tiba-tiba.
-- Jangan menyebut angka spesifik (detik, meter, suhu, jumlah).
-- Buat terasa menggantung dan memicu rasa penasaran.
-- Harus realistis dan mungkin terjadi di dunia nyata.
-
-FORMAT:
-- Hanya judul.
-- Satu baris per ide.
-- Tanpa numbering.
-- Tanpa deskripsi.
-- Gunakan format seperti:
-  "Bagaimana jika..."
-  "Apa yang terjadi jika..."
-  "Berapa lama kamu bisa..."
+Buat 10 ide video viral Extreme Anatomy.
+Campuran:
+70% realistis ekstrem
+30% spekulatif ilmiah (misalnya hidup bersama naga).
+Gunakan format: Apa yang Terjadi Jika...
 `;
 
-    try{
-        const result = await callGroq(prompt);
-        ideas.innerHTML="";
-        result.split("\n").forEach(line=>{
-            if(line.trim()){
-                const d=document.createElement("div");
-                d.className="idea";
-                d.innerText=line;
-                d.onclick=()=>produceFull(line);
-                ideas.appendChild(d);
-            }
-        });
-    }catch(err){
-        ideas.innerHTML="<div class='loading'>Error: "+err.message+"</div>";
-    }
+    document.getElementById("ideasOutput").innerText = "Loading...";
+    const result = await callGroq(prompt);
+    document.getElementById("ideasOutput").innerText = result;
 }
 
-// -------------------- Produce Full Script + Scenes --------------------
-async function produceFull(idea){
-    const container=document.getElementById("productionContainer");
-    container.innerHTML="<div class='loading'>🚀 Producing cinematic production system...</div>";
+async function generateFull() {
+    const idea = document.getElementById("selectedIdea").value;
 
-    const masterPrompt=`
-Anda adalah sistem produksi YouTube Shorts profesional.
+    const prompt = `
+Buat konten lengkap untuk channel Extreme Anatomy.
 
 Topik: ${idea}
 
-Buat narasi 45-70 detik dengan format:
+Struktur:
+1. Skrip 45-60 detik progresif waktu.
+2. PROMPT GAMBAR Scene 1-5.
+3. PROMPT VIDEO Scene 1-5.
 
-[NARASI]
-Gabungkan judul dan narasi progresif.
-Gunakan "Selama X [menit/jam/hari/minggu/bulan/tahun]" untuk setiap progresi.
+Gunakan format jelas:
 
-[SCENE]
-Pisahkan setiap progresi narasi menjadi scene tersendiri.
-Untuk setiap scene, buat:
-- SCRIPT: sesuaikan dengan bagian narasi tersebut
-- IMAGE PROMPT: buat cinematic prompt realistis
-    - Selalu mulai dengan "Ultra-realistic cinematic 3D render dari sosok kerangka humanoid dengan lapisan tubuh transparan seperti kristal/gelas menutupi tulang, tengkorak anatomi yang jelas dengan gigi terlihat dan memiliki bola mata asli, tampilan semi-x-ray, realitas edukatif dan surealis, tidak menakutkan, bukan kartun, detail ultra tinggi, fokus tajam, 8K."
-    - Sertakan lokasi/environment, pose skeleton, perspektif kamera, pencahayaan & mood
-    - Tambahkan efek tambahan sesuai narasi (misal: darah, asap, debu, kabut, air, api)
-    - Pertahankan konsistensi kerangka 3D dan detail anatomi
-    - Akhiri dengan "Rendered in clean cinematic 3D, highly detailed"
-- VIDEO PROMPT: ubah IMAGE PROMPT menjadi cinematic image-to-video
+SCRIPT:
+...
 
-Jumlah scene menyesuaikan panjang narasi.
-Setiap scene harus eskalatif dan dramatis.
-Buat prompt image cukup jelas agar hasil render realistis dan cinematic, bukan deskripsi literal.
+SCENE 1 IMAGE:
+...
+
+SCENE 1 VIDEO:
+...
+
+SCENE 2 IMAGE:
+...
+
+SCENE 2 VIDEO:
+...
+
+dst sampai SCENE 5.
+
+Karakter wajib konsisten:
+Ultra-realistic cinematic 3D render dari sosok kerangka humanoid dengan lapisan tubuh transparan seperti kristal atau gelas, identical character model across scenes.
+
+Gunakan environment lock dan negative background protection.
 `;
 
-    try{
-        const result = await callGroq(masterPrompt);
-        renderSections(result);
-    }catch(err){
-        container.innerHTML="<div class='loading'>Error: "+err.message+"</div>";
-    }
+    document.getElementById("scriptOutput").innerText = "Loading...";
+    document.getElementById("scenesContainer").innerHTML = "";
+
+    const result = await callGroq(prompt);
+
+    parseOutput(result);
 }
 
-// -------------------- Render Sections --------------------
-function renderSections(text){
-    const container=document.getElementById("productionContainer");
-    container.innerHTML="";
+function parseOutput(text) {
+    const scriptMatch = text.match(/SCRIPT:\s*([\s\S]*?)SCENE 1 IMAGE:/);
+    const scriptText = scriptMatch ? scriptMatch[1].trim() : "Script tidak ditemukan";
 
-    // Split by markers
-    const sections=text.split(/\[SCENE\]|\[NARASI\]/).map(s=>s.trim()).filter(s=>s);
+    document.getElementById("scriptOutput").innerHTML = `
+        <h3>Script</h3>
+        <textarea rows="8">${scriptText}</textarea>
+        <button class="copyBtn" onclick="copyText(this.previousElementSibling.value)">Copy Script</button>
+    `;
 
-    if(sections.length>0){
-        // Narasi
-        const box=document.createElement("div");
-        box.className="section-box";
-        box.innerHTML=`
-            <div class="section-title">🧠 Narasi</div>
-            <div class="section-content" contenteditable="true">${sections[0]}</div>
-            <button class="copy-btn" onclick="copySection(this)">Copy</button>
+    const scenesContainer = document.getElementById("scenesContainer");
+    scenesContainer.innerHTML = "<h3>Scenes</h3>";
+
+    for (let i = 1; i <= 5; i++) {
+        const imageRegex = new RegExp("SCENE " + i + " IMAGE:\\s*([\\s\\S]*?)SCENE " + i + " VIDEO:");
+        const videoRegex = new RegExp("SCENE " + i + " VIDEO:\\s*([\\s\\S]*?)(SCENE " + (i+1) + " IMAGE:|$)");
+
+        const imageMatch = text.match(imageRegex);
+        const videoMatch = text.match(videoRegex);
+
+        const imageText = imageMatch ? imageMatch[1].trim() : "";
+        const videoText = videoMatch ? videoMatch[1].trim() : "";
+
+        scenesContainer.innerHTML += `
+            <div class="scene">
+                <h4>Scene ${i}</h4>
+
+                <b>Image Prompt</b>
+                <textarea rows="6">${imageText}</textarea>
+                <button class="copyBtn" onclick="copyText(this.previousElementSibling.value)">Copy Image</button>
+
+                <br><br>
+
+                <b>Video Prompt</b>
+                <textarea rows="6">${videoText}</textarea>
+                <button class="copyBtn" onclick="copyText(this.previousElementSibling.value)">Copy Video</button>
+            </div>
         `;
-        container.appendChild(box);
-
-        // Scene boxes
-        for(let i=1;i<sections.length;i++){
-            const sceneBox=document.createElement("div");
-            sceneBox.className="section-box";
-            sceneBox.innerHTML=`
-                <div class="section-title">🎞 Scene ${i}</div>
-                <div class="section-content" contenteditable="true">${sections[i]}</div>
-                <button class="copy-btn" onclick="copySection(this)">Copy</button>
-            `;
-            container.appendChild(sceneBox);
-        }
     }
 }
 
-// -------------------- Copy & Export --------------------
-function copySection(btn){
-    const text=btn.previousElementSibling.innerText;
+function copyText(text) {
     navigator.clipboard.writeText(text);
-    btn.innerText="Copied ✔";
-    setTimeout(()=>btn.innerText="Copy",1500);
-}
-
-function exportJSON(){
-    const content=document.getElementById("productionContainer").innerText;
-    const blob=new Blob([JSON.stringify({production:content},null,2)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="shorts-production-pack.json";
-    a.click();
+    alert("Copied!");
 }
 </script>
+
 </body>
 </html>
