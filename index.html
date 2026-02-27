@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Shorts Production System</title>
+<title>Extreme Viral Engine v2</title>
 
 <style>
 body{
@@ -13,7 +13,7 @@ body{
     color:white;
 }
 .container{
-    max-width:900px;
+    max-width:1000px;
     margin:auto;
     padding:20px;
 }
@@ -30,37 +30,35 @@ h1{
 button{
     background:#38bdf8;
     color:black;
-    padding:8px 12px;
+    padding:8px 14px;
     border:none;
     border-radius:8px;
     cursor:pointer;
     font-weight:bold;
-    margin-top:5px;
+    margin-top:6px;
 }
-button:hover{
-    opacity:0.85;
-}
+button:hover{opacity:0.85}
 .idea{
     background:#334155;
-    padding:10px;
+    padding:12px;
     border-radius:8px;
     margin-bottom:10px;
     cursor:pointer;
 }
-.idea:hover{
-    background:#475569;
-}
+.idea:hover{background:#475569}
 .scene{
     background:#0b1220;
     padding:15px;
-    border-radius:8px;
+    border-radius:10px;
+    margin-bottom:20px;
     border:1px solid #334155;
-    margin-bottom:15px;
 }
 .copyBtn{
     background:#22c55e;
     color:black;
-    margin-top:10px;
+}
+pre{
+    white-space:pre-wrap;
 }
 input{
     width:100%;
@@ -71,29 +69,29 @@ input{
 }
 </style>
 </head>
-
 <body>
+
 <div class="container">
 
-<h1>🔥 AI Shorts Production System</h1>
+<h1>🔥 EXTREME VIRAL SHORTS ENGINE</h1>
 
 <div class="card">
 <label>Masukkan GROQ API Key</label>
-<input type="password" id="apiKey" placeholder="Masukkan API Key">
+<input type="password" id="apiKey">
 <button onclick="saveKey()">Simpan Key</button>
 </div>
 
 <div class="card">
-<button onclick="generateIdeas()">Generate 10 Ide Viral</button>
+<button onclick="generateIdeas()">Generate Extreme Ideas</button>
 </div>
 
 <div class="card">
-<h3>Daftar Ide</h3>
+<h3>Ide Viral</h3>
 <div id="ideas"></div>
 </div>
 
 <div class="card">
-<h3>Script + Scene</h3>
+<h3>Narasi + Scene Prompts</h3>
 <div id="result"></div>
 </div>
 
@@ -114,17 +112,14 @@ function saveKey(){
 }
 
 async function callGroq(prompt){
-    const apiKey = localStorage.getItem("GROQ_API_KEY");
-    if(!apiKey){
-        alert("Masukkan API Key dulu!");
-        return null;
-    }
+    const key = localStorage.getItem("GROQ_API_KEY");
+    if(!key){ alert("Masukkan API Key dulu!"); return null; }
 
     const response = await fetch("https://api.groq.com/openai/v1/responses",{
         method:"POST",
         headers:{
             "Content-Type":"application/json",
-            "Authorization":"Bearer " + apiKey
+            "Authorization":"Bearer "+key
         },
         body: JSON.stringify({
             model:"openai/gpt-oss-20b",
@@ -155,19 +150,21 @@ async function generateIdeas(){
     document.getElementById("result").innerHTML="";
 
     const prompt=`
-Buatkan 10 ide video YouTube Shorts viral gaya:
-- Apa yang terjadi jika...
-- Berapa lama kamu bisa...
-- Apa yang terjadi pada tubuhmu jika...
+Buat 10 ide YouTube Shorts ekstrem.
 
-Format hanya daftar bernomor.
+Aturan:
+- Tanpa angka di judul.
+- Fokus lingkungan ekstrem, hewan liar, reaksi kimia, kondisi aneh.
+- Harus misterius dan bikin penasaran.
+- Gaya: "Apa yang terjadi jika...","Berapa lama kamu bisa...","Bagaimana jika..."
+- Jangan generik.
+- Format daftar saja.
 `;
 
-    const text = await callGroq(prompt);
+    const text=await callGroq(prompt);
     if(!text) return;
 
-    const lines = text.split("\n").filter(l=>l.trim()!="");
-
+    const lines=text.split("\n").filter(l=>l.trim()!="");
     const ideasDiv=document.getElementById("ideas");
     ideasDiv.innerHTML="";
 
@@ -175,34 +172,44 @@ Format hanya daftar bernomor.
         const div=document.createElement("div");
         div.className="idea";
         div.innerText=line;
-        div.onclick=()=>generateScript(line);
+        div.onclick=()=>generateFullVideo(line);
         ideasDiv.appendChild(div);
     });
 }
 
-async function generateScript(idea){
-    document.getElementById("result").innerHTML="Generating script...";
+async function generateFullVideo(idea){
+    document.getElementById("result").innerHTML="Generating...";
 
     const prompt=`
-Buat narasi YouTube Shorts durasi 45-70 detik.
+Buat narasi 45-70 detik untuk YouTube Shorts.
 
-FORMAT WAJIB:
+Format:
 
 [NARASI]
-Judul langsung menyatu sebagai kalimat pembuka.
-Lalu progresi waktu seperti:
-Selama 5 detik...
-Selama 30 detik...
-Selama 1 menit...
-Tanpa bullet.
-Tanpa tanda bintang.
-Tanpa format markdown.
+Judul menyatu sebagai kalimat pembuka.
+Gunakan progresi waktu seperti:
+Selama detik...
+Selama menit...
+Selama waktu...
 
-[SCENE]
-Pisahkan per scene seperti:
+Lalu buat SCENE mengikuti narasi (jumlah scene fleksibel, sesuai alur).
+
+Aturan SCENE:
+- Lokasi sama dari awal sampai akhir.
+- Karakter sama.
+- Lighting sama.
+- Gaya 3D anatomi transparan edukatif.
+- Detail sinematik tinggi.
+- Jangan gore.
+
+Format SCENE:
+
 SCENE 1
-SCRIPT:
-VISUAL:
+[prompt image]
+detail sinematik
+
+[prompt video]
+gerakan kamera, efek cahaya, animasi tubuh
 
 Topik: ${idea}
 `;
@@ -219,26 +226,32 @@ function renderScenes(text){
 
     const scenes=text.split("SCENE").filter(s=>s.trim()!="");
 
-    scenes.forEach((scene,index)=>{
+    scenes.forEach(scene=>{
+        const full="SCENE"+scene;
+
+        const parts=full.split("[prompt video]");
+        const imagePart=parts[0];
+        const videoPart=parts[1] || "";
+
         const div=document.createElement("div");
         div.className="scene";
 
-        const content="SCENE"+scene;
-
         div.innerHTML=`
-        <pre style="white-space:pre-wrap">${content}</pre>
-        <button class="copyBtn" onclick="copyText(this)">Copy Scene</button>
+        <pre>${imagePart}</pre>
+        <button class="copyBtn" onclick="copyText(this)">Copy Image Prompt</button>
+        <pre>[prompt video]${videoPart}</pre>
+        <button class="copyBtn" onclick="copyText(this)">Copy Video Prompt</button>
         `;
 
         container.appendChild(div);
     });
 }
 
-function copyText(button){
-    const text=button.parentElement.innerText.replace("Copy Scene","");
+function copyText(btn){
+    const text=btn.previousElementSibling.innerText;
     navigator.clipboard.writeText(text);
-    button.innerText="Copied!";
-    setTimeout(()=>button.innerText="Copy Scene",1500);
+    btn.innerText="Copied!";
+    setTimeout(()=>btn.innerText="Copy",1500);
 }
 
 </script>
