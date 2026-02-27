@@ -30,11 +30,12 @@ h1{
 button{
     background:#38bdf8;
     color:black;
-    padding:10px 15px;
+    padding:8px 12px;
     border:none;
     border-radius:8px;
     cursor:pointer;
     font-weight:bold;
+    margin-top:5px;
 }
 button:hover{
     opacity:0.85;
@@ -49,12 +50,17 @@ button:hover{
 .idea:hover{
     background:#475569;
 }
-#result{
-    white-space:pre-line;
+.scene{
     background:#0b1220;
     padding:15px;
     border-radius:8px;
     border:1px solid #334155;
+    margin-bottom:15px;
+}
+.copyBtn{
+    background:#22c55e;
+    color:black;
+    margin-top:10px;
 }
 input{
     width:100%;
@@ -155,7 +161,6 @@ Buatkan 10 ide video YouTube Shorts viral gaya:
 - Apa yang terjadi pada tubuhmu jika...
 
 Format hanya daftar bernomor.
-Jangan penjelasan.
 `;
 
     const text = await callGroq(prompt);
@@ -176,24 +181,28 @@ Jangan penjelasan.
 }
 
 async function generateScript(idea){
-    document.getElementById("result").innerText="Generating script...";
+    document.getElementById("result").innerHTML="Generating script...";
 
     const prompt=`
 Buat narasi YouTube Shorts durasi 45-70 detik.
 
-Format WAJIB:
-
-[JUDUL]
-Judul kuat dan clickbait edukatif.
+FORMAT WAJIB:
 
 [NARASI]
-Gunakan progresi waktu:
-"Selama X detik/menit/jam..."
+Judul langsung menyatu sebagai kalimat pembuka.
+Lalu progresi waktu seperti:
+Selama 5 detik...
+Selama 30 detik...
+Selama 1 menit...
+Tanpa bullet.
+Tanpa tanda bintang.
+Tanpa format markdown.
 
 [SCENE]
-Pisahkan per scene:
-- SCRIPT:
-- VISUAL: (deskripsi animasi anatomi 3D, kerangka transparan, cinematic, edukatif, non-horror)
+Pisahkan per scene seperti:
+SCENE 1
+SCRIPT:
+VISUAL:
 
 Topik: ${idea}
 `;
@@ -201,7 +210,35 @@ Topik: ${idea}
     const text=await callGroq(prompt);
     if(!text) return;
 
-    document.getElementById("result").innerText=text;
+    renderScenes(text);
+}
+
+function renderScenes(text){
+    const container=document.getElementById("result");
+    container.innerHTML="";
+
+    const scenes=text.split("SCENE").filter(s=>s.trim()!="");
+
+    scenes.forEach((scene,index)=>{
+        const div=document.createElement("div");
+        div.className="scene";
+
+        const content="SCENE"+scene;
+
+        div.innerHTML=`
+        <pre style="white-space:pre-wrap">${content}</pre>
+        <button class="copyBtn" onclick="copyText(this)">Copy Scene</button>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+function copyText(button){
+    const text=button.parentElement.innerText.replace("Copy Scene","");
+    navigator.clipboard.writeText(text);
+    button.innerText="Copied!";
+    setTimeout(()=>button.innerText="Copy Scene",1500);
 }
 
 </script>
