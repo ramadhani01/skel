@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>YouTube Shorts AI Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Shorts Production System</title>
 
 <style>
 body{
@@ -27,15 +27,6 @@ h1{
     border-radius:12px;
     margin-bottom:20px;
 }
-input, textarea{
-    width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    margin-top:10px;
-    margin-bottom:10px;
-    font-size:14px;
-}
 button{
     background:#38bdf8;
     color:black;
@@ -46,7 +37,7 @@ button{
     font-weight:bold;
 }
 button:hover{
-    opacity:0.8;
+    opacity:0.85;
 }
 .idea{
     background:#334155;
@@ -60,13 +51,17 @@ button:hover{
 }
 #result{
     white-space:pre-line;
-    background:#0f172a;
+    background:#0b1220;
     padding:15px;
     border-radius:8px;
     border:1px solid #334155;
 }
-.error{
-    color:red;
+input{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:10px;
 }
 </style>
 </head>
@@ -74,31 +69,27 @@ button:hover{
 <body>
 <div class="container">
 
-<h1>🔥 AI YouTube Shorts Generator</h1>
+<h1>🔥 AI Shorts Production System</h1>
 
 <div class="card">
 <label>Masukkan GROQ API Key</label>
-<input type="password" id="apiKey" placeholder="Masukkan API Key Groq"/>
+<input type="password" id="apiKey" placeholder="Masukkan API Key">
 <button onclick="saveKey()">Simpan Key</button>
 </div>
 
 <div class="card">
-<label>Masukkan Topik</label>
-<input type="text" id="topic" placeholder="Contoh: Jika manusia tidak tidur"/>
-<button onclick="generateIdeas()">Generate Ide</button>
+<button onclick="generateIdeas()">Generate 10 Ide Viral</button>
 </div>
 
 <div class="card">
-<h3>Ide Video</h3>
+<h3>Daftar Ide</h3>
 <div id="ideas"></div>
 </div>
 
 <div class="card">
-<h3>Script 45-70 Detik</h3>
+<h3>Script + Scene</h3>
 <div id="result"></div>
 </div>
-
-<div id="error" class="error"></div>
 
 </div>
 
@@ -112,19 +103,14 @@ window.onload = function(){
 }
 
 function saveKey(){
-    const key = document.getElementById("apiKey").value;
-    localStorage.setItem("GROQ_API_KEY", key);
-    alert("API Key berhasil disimpan!");
-}
-
-function showError(msg){
-    document.getElementById("error").innerText = msg;
+    localStorage.setItem("GROQ_API_KEY",document.getElementById("apiKey").value);
+    alert("API Key tersimpan!");
 }
 
 async function callGroq(prompt){
     const apiKey = localStorage.getItem("GROQ_API_KEY");
     if(!apiKey){
-        showError("API Key belum disimpan!");
+        alert("Masukkan API Key dulu!");
         return null;
     }
 
@@ -135,21 +121,20 @@ async function callGroq(prompt){
             "Authorization":"Bearer " + apiKey
         },
         body: JSON.stringify({
-            model: "openai/gpt-oss-20b",
-            input: prompt
+            model:"openai/gpt-oss-20b",
+            input:prompt
         })
     });
 
     const data = await response.json();
 
-    let text = "";
-
+    let text="";
     if(data.output){
         data.output.forEach(item=>{
             if(item.content){
                 item.content.forEach(part=>{
                     if(part.type==="output_text"){
-                        text += part.text;
+                        text+=part.text;
                     }
                 });
             }
@@ -160,32 +145,29 @@ async function callGroq(prompt){
 }
 
 async function generateIdeas(){
-    showError("");
     document.getElementById("ideas").innerHTML="Loading...";
+    document.getElementById("result").innerHTML="";
 
-    const topic = document.getElementById("topic").value;
+    const prompt=`
+Buatkan 10 ide video YouTube Shorts viral gaya:
+- Apa yang terjadi jika...
+- Berapa lama kamu bisa...
+- Apa yang terjadi pada tubuhmu jika...
 
-    const prompt = `
-Buatkan 5 ide video YouTube Shorts gaya:
-"Apa yang terjadi jika..."
-Format hanya daftar ide.
-Topik utama: ${topic}
+Format hanya daftar bernomor.
+Jangan penjelasan.
 `;
 
     const text = await callGroq(prompt);
-
-    if(!text){
-        showError("Gagal generate ide.");
-        return;
-    }
+    if(!text) return;
 
     const lines = text.split("\n").filter(l=>l.trim()!="");
 
-    const ideasDiv = document.getElementById("ideas");
+    const ideasDiv=document.getElementById("ideas");
     ideasDiv.innerHTML="";
 
     lines.forEach(line=>{
-        const div = document.createElement("div");
+        const div=document.createElement("div");
         div.className="idea";
         div.innerText=line;
         div.onclick=()=>generateScript(line);
@@ -194,31 +176,32 @@ Topik utama: ${topic}
 }
 
 async function generateScript(idea){
-    showError("");
     document.getElementById("result").innerText="Generating script...";
 
-    const prompt = `
+    const prompt=`
 Buat narasi YouTube Shorts durasi 45-70 detik.
+
 Format WAJIB:
 
-Baris pertama = JUDUL
-Lalu progresi waktu dengan format:
+[JUDUL]
+Judul kuat dan clickbait edukatif.
+
+[NARASI]
+Gunakan progresi waktu:
 "Selama X detik/menit/jam..."
 
-Gaya edukatif anatomi 3D.
-Jangan lebih dari 70 detik.
+[SCENE]
+Pisahkan per scene:
+- SCRIPT:
+- VISUAL: (deskripsi animasi anatomi 3D, kerangka transparan, cinematic, edukatif, non-horror)
 
 Topik: ${idea}
 `;
 
-    const text = await callGroq(prompt);
+    const text=await callGroq(prompt);
+    if(!text) return;
 
-    if(!text){
-        showError("Gagal generate script.");
-        return;
-    }
-
-    document.getElementById("result").innerText = text;
+    document.getElementById("result").innerText=text;
 }
 
 </script>
